@@ -1,753 +1,516 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DigiApply - Digital Job Application Practice Portal for India</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A free, browser-based job application practice tool by DigiCafe. Prepare your profile and review your application before applying.">
+<title>DigiCareer by DigiCafe — Job Application Practice</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{--ink:#111827;--bg:#F9FAFB;--white:#fff;--border:#E5E7EB;--muted:#6B7280;--blue:#2563EB;--red:#DC2626;--green:#059669;--amber:#D97706;--lb:#EFF6FF;--lg:#ECFDF5;--ly:#FFFBEB}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5}
-
-nav{background:var(--ink);height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:200}
-.logo{color:#fff;font-size:19px;font-weight:800;letter-spacing:-0.5px}.logo b{color:#34D399}
-.nbadge{background:#059669;color:#fff;font-size:11px;font-weight:700;padding:3px 11px;border-radius:20px;letter-spacing:.5px}
-
-.hero{background:linear-gradient(135deg,#064e3b,#065F46,#1e40af);color:#fff;padding:36px 20px}
-.hw{max-width:860px;margin:0 auto}
-.htag{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#6EE7B7;margin-bottom:8px}
-.hero h1{font-size:clamp(20px,4vw,36px);font-weight:800;line-height:1.2;margin-bottom:10px}
-.hero h1 b{color:#FCD34D}
-.hero p{font-size:13px;color:rgba(255,255,255,.65);max-width:500px;line-height:1.7;margin-bottom:20px}
-.stats{display:flex;gap:20px;flex-wrap:wrap}
-.sn{font-size:22px;font-weight:800}.sl{font-size:10px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.5px}
-
-.stbar{background:#fff;border-bottom:1px solid var(--border);padding:0 20px;position:sticky;top:56px;z-index:100;overflow-x:auto}
-.stinner{max-width:860px;margin:0 auto;display:flex;align-items:center;padding:10px 0;white-space:nowrap}
-.si{display:inline-flex;align-items:center;gap:5px}
-.sdot{width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;border:2px solid var(--border);background:var(--bg);color:var(--muted);flex-shrink:0;transition:all .25s}
-.sdot.on{background:var(--blue);border-color:var(--blue);color:#fff}
-.sdot.dn{background:var(--green);border-color:var(--green);color:#fff}
-.slbl{font-size:11.5px;color:var(--muted);font-weight:500}
-.slbl.on{color:var(--ink);font-weight:700}
-.sline{width:24px;height:2px;background:var(--border);margin:0 3px;flex-shrink:0;transition:background .25s}
-.sline.dn{background:var(--green)}
-
-.main{max-width:860px;margin:0 auto;padding:20px;display:grid;grid-template-columns:1fr 252px;gap:18px;align-items:start}
-@media(max-width:680px){.main{grid-template-columns:1fr;padding:12px}}
-
-.pg{display:none}.pg.on{display:block}
-
-.card{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 1px 8px rgba(0,0,0,.05)}
-.ch{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between}
-.ct{font-size:15px;font-weight:700}.csub{font-size:11.5px;color:var(--muted);margin-top:2px}
-.cn{font-size:11px;font-weight:600;color:var(--muted);background:var(--bg);border:1px solid var(--border);padding:3px 9px;border-radius:20px;white-space:nowrap}
-.cb{padding:20px}
-.cf{padding:12px 20px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:#FAFAFA}
-
-.errbox{background:#FEF2F2;border:1.5px solid #FCA5A5;color:#991B1B;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:13px;line-height:1.7;display:none}
-.ibox{border-radius:8px;padding:10px 13px;margin-bottom:12px;font-size:12.5px;line-height:1.6}
-.ib-blue{background:var(--lb);border:1px solid #BFDBFE;color:#1E40AF}
-.ib-green{background:var(--lg);border:1px solid #A7F3D0;color:#065F46}
-.ib-amber{background:var(--ly);border:1px solid #FDE68A;color:#92400E}
-.ib-red{background:#FFF7ED;border:1px solid #FED7AA;color:#92400E}
-
-.fld{margin-bottom:16px}
-.lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--ink);margin-bottom:5px;display:flex;align-items:center;gap:5px}
-.req{color:var(--red)}
-.ico{width:16px;height:16px;border-radius:50%;background:#E5E7EB;color:var(--muted);font-size:10px;font-style:normal;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
-input[type=text],input[type=email],input[type=tel],input[type=number],input[type=url],input[type=date],select,textarea{width:100%;padding:10px 12px;font-size:13.5px;font-family:inherit;border:1.5px solid var(--border);border-radius:8px;background:#fff;color:var(--ink);outline:none;transition:.15s}
-input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.09)}
-input.ok{border-color:var(--green)}input.er{border-color:var(--red)}
-textarea{min-height:85px;resize:vertical}
-.fhint{font-size:11px;color:var(--muted);margin-top:4px}
-.ferr{font-size:11px;color:var(--red);margin-top:4px;display:none;font-weight:600}
-.fok{font-size:11px;color:var(--green);margin-top:4px;display:none;font-weight:600}
-
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media(max-width:480px){.g2{grid-template-columns:1fr}}
-
-.pfxw{display:flex}.pfx{background:#F3F4F6;border:1.5px solid var(--border);border-right:none;padding:0 10px;border-radius:8px 0 0 8px;font-size:12px;color:var(--muted);font-weight:700;display:flex;align-items:center}
-.pfxw input{border-radius:0 8px 8px 0}
-.phw{display:flex}.phcc{width:58px;border-radius:8px 0 0 8px;border-right:none;background:#F3F4F6;text-align:center;padding:10px 5px}
-.phw input:last-child{border-radius:0 8px 8px 0;flex:1}
-
-.rrow{display:flex;gap:7px;flex-wrap:wrap}
-.ro input{display:none}
-.ro label{display:flex;align-items:center;gap:5px;padding:7px 13px;border-radius:8px;cursor:pointer;border:1.5px solid var(--border);font-size:13px;font-weight:500;color:var(--muted);background:#fff;transition:.15s}
-.ro input:checked+label{border-color:var(--blue);background:var(--lb);color:var(--blue);font-weight:600}
-.ro label:hover{border-color:var(--blue)}
-
-.tagw{position:relative}
-.tarea{display:flex;flex-wrap:wrap;gap:5px;padding:8px 10px;min-height:46px;border:1.5px solid var(--border);border-radius:8px;background:#fff;cursor:text;transition:.15s}
-.tarea:focus-within{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.09)}
-.tag{display:flex;align-items:center;gap:4px;background:var(--ink);color:#fff;padding:2px 9px;border-radius:20px;font-size:12px;font-weight:500}
-.tag button{background:none;border:none;color:rgba(255,255,255,.55);cursor:pointer;font-size:13px;line-height:1;padding:0}
-.tinp{border:none;outline:none;background:transparent;font-size:13px;font-family:inherit;min-width:90px;color:var(--ink);padding:1px 0}
-.sugg{position:absolute;top:100%;left:0;right:0;background:#fff;border:1.5px solid var(--border);border-top:none;border-radius:0 0 8px 8px;z-index:60;max-height:150px;overflow-y:auto;display:none;box-shadow:0 4px 10px rgba(0,0,0,.08)}
-.sugg div{padding:7px 12px;font-size:13px;cursor:pointer}
-.sugg div:hover{background:var(--lb);color:var(--blue)}
-
-.igrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:6px;max-height:260px;overflow-y:auto;padding:2px}
-.ic input{display:none}
-.ic label{display:flex;align-items:flex-start;gap:6px;padding:8px 10px;border-radius:8px;cursor:pointer;border:1.5px solid var(--border);font-size:12px;background:#fff;transition:.15s;line-height:1.4}
-.ic input:checked+label{border-color:var(--green);background:var(--lg);color:var(--green);font-weight:600}
-.ic label:hover{border-color:var(--green)}
-
-.rlist{display:flex;flex-direction:column;gap:4px;max-height:230px;overflow-y:auto}
-.rc input{display:none}
-.rc label{display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:8px;cursor:pointer;border:1.5px solid var(--border);font-size:12.5px;background:#fff;transition:.15s}
-.rc input:checked+label{border-color:var(--blue);background:var(--lb);color:var(--blue);font-weight:600}
-.rc label:hover{border-color:var(--blue)}
-.rcat{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);padding:7px 0 3px}
-
-.conl{display:flex;flex-direction:column;gap:10px}
-.ci{display:flex;align-items:flex-start;gap:8px;cursor:pointer}
-.ci input{width:15px;height:15px;margin-top:2px;accent-color:var(--green);flex-shrink:0}
-.ci span{font-size:13px;line-height:1.6}
-
-.btn{font-family:inherit;font-size:13.5px;font-weight:600;padding:10px 22px;border-radius:8px;cursor:pointer;border:none;transition:.15s}
-.btnp{background:var(--blue);color:#fff}.btnp:hover{background:#1D4ED8;transform:translateY(-1px)}
-.btng{background:#F3F4F6;color:var(--muted)}.btng:hover{background:#E5E7EB;color:var(--ink)}
-.btns{background:var(--green);color:#fff;font-size:14px;padding:11px 24px}.btns:hover{background:#047857}
-
-.divider{height:1px;background:var(--border);margin:15px 0}
-.cc{font-size:11px;color:var(--muted);text-align:right;margin-top:3px}
-.revbox{background:#F9FAFB;border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:14px;font-size:13px;line-height:1.8}
-.sdisp{font-size:12px;color:var(--green);margin-top:4px;font-weight:600;min-height:16px}
-.hdisp{font-size:12px;margin-top:3px;font-weight:600;min-height:16px}
-
-.sidebar{display:flex;flex-direction:column;gap:13px;position:sticky;top:110px}
-.sccard{background:var(--ink);border-radius:12px;padding:15px 17px;color:#fff}
-.scttl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.4);margin-bottom:12px}
-.scrow{margin-bottom:9px}
-.sclbl{display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px}
-.sclbl span:first-child{color:rgba(255,255,255,.6)}.sclbl span:last-child{color:#fff;font-weight:700}
-.sctrack{background:rgba(255,255,255,.1);border-radius:3px;height:5px}
-.scbar{height:5px;border-radius:3px;transition:width .45s ease}
-.c1{background:#60A5FA}.c2{background:#34D399}.c3{background:#FBBF24}
-
-.tipcard{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px 16px}
-.tipttl{font-size:12.5px;font-weight:700;margin-bottom:8px}
-.tipitem{display:flex;gap:6px;font-size:12px;line-height:1.6;margin-bottom:6px}
-.tipdot{width:4px;height:4px;border-radius:50%;background:var(--blue);flex-shrink:0;margin-top:7px}
-
-.miscard{background:#FFF7ED;border:1px solid #FED7AA;border-radius:12px;padding:14px 16px}
-.misttl{font-size:12.5px;font-weight:700;color:#92400E;margin-bottom:8px}
-.misitem{font-size:12px;color:#78350F;margin-bottom:5px;line-height:1.5}
-
-.donewrap{display:none}.donewrap.show{display:block}
-.donecard{background:#fff;border:1px solid var(--border);border-radius:14px;padding:36px 28px;text-align:center;box-shadow:0 1px 8px rgba(0,0,0,.06)}
-.dicon{font-size:56px;margin-bottom:14px}
-.dttl{font-size:26px;font-weight:800;color:var(--green);margin-bottom:8px}
-.dsub{font-size:13.5px;color:var(--muted);max-width:390px;margin:0 auto 22px;line-height:1.7}
-.dscore{font-size:68px;font-weight:800;line-height:1}
-.dscorel{font-size:12px;color:var(--muted);margin-top:3px;margin-bottom:20px}
-.dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:9px;margin-bottom:20px}
-.dstat{background:#F9FAFB;border-radius:9px;padding:13px;border:1px solid var(--border)}
-.dsv{font-size:20px;font-weight:800}.dsl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
-.fbbox{text-align:left;background:#F9FAFB;border-radius:9px;padding:14px 16px;margin-bottom:18px;border:1px solid var(--border)}
-.fbttl{font-weight:700;font-size:13px;margin-bottom:8px}
-.fbitem{font-size:12.5px;margin-bottom:6px;line-height:1.6;display:flex;gap:6px;align-items:flex-start}
-.fbitem.ok{color:var(--green)}.fbitem.ng{color:var(--red)}
-.restbtn{background:var(--ink);color:#fff;padding:10px 24px;border:none;border-radius:8px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer}
-
-.ttp{position:fixed;background:#1F2937;color:#fff;padding:8px 12px;border-radius:7px;font-size:12px;line-height:1.6;max-width:220px;z-index:9999;display:none;pointer-events:none;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+  :root {
+    --navy:#102a43; --blue:#2463eb; --blue-dark:#1949b8; --ink:#172b4d;
+    --muted:#62748a; --line:#dbe4ee; --paper:#ffffff; --bg:#f3f7fb;
+    --soft:#eaf1ff; --green:#16805d; --red:#b42318; --amber:#946200;
+    --shadow:0 12px 32px rgba(16,42,67,.08); --radius:18px;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+  header { background:linear-gradient(125deg,#102a43,#174a7e); color:white; padding:25px 20px 32px; }
+  .header-inner, main, footer { width:min(100% - 32px, 980px); margin:0 auto; }
+  .brand { font-weight:800; letter-spacing:.2px; font-size:1.15rem; }
+  .brand span { color:#9ec5ff; }
+  .hero { padding:23px 0 0; }
+  .hero h1 { margin:0 0 8px; font-size:clamp(1.9rem,5vw,3rem); line-height:1.12; letter-spacing:-.7px; }
+  .hero p { margin:0; color:#d9e8fa; max-width:680px; }
+  main { padding:25px 0 42px; }
+  .notice { border:1px solid #c8d9f5; background:#f0f6ff; border-radius:12px; padding:12px 15px; margin-bottom:18px; color:#23456e; font-size:.92rem; }
+  .panel { background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; }
+  .panel-head { padding:22px 24px 16px; border-bottom:1px solid var(--line); }
+  .panel-head h2 { margin:0 0 4px; font-size:1.25rem; }
+  .panel-head p { margin:0; color:var(--muted); font-size:.93rem; }
+  .progress-wrap { padding:17px 24px 0; }
+  .progress-meta { display:flex; justify-content:space-between; gap:12px; color:var(--muted); font-size:.85rem; margin-bottom:8px; }
+  .progress { height:8px; border-radius:99px; background:#e7edf5; overflow:hidden; }
+  .progress-fill { height:100%; width:25%; background:var(--blue); border-radius:99px; transition:width .2s ease; }
+  .steps { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; padding:15px 24px 0; }
+  .step-tag { color:var(--muted); font-size:.8rem; padding:7px 8px; border-radius:8px; text-align:center; background:#f4f7fa; }
+  .step-tag.active { background:var(--soft); color:var(--blue-dark); font-weight:700; }
+  .step-tag.done { color:var(--green); background:#eaf8f2; }
+  form { padding:22px 24px 24px; }
+  .step-pane { display:none; }
+  .step-pane.active { display:block; }
+  .step-pane h3 { margin:0 0 5px; font-size:1.15rem; }
+  .hint { color:var(--muted); margin:0 0 20px; font-size:.92rem; }
+  .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:17px 18px; }
+  .field { min-width:0; }
+  .field.full { grid-column:1/-1; }
+  label, .label { display:block; font-weight:650; font-size:.92rem; margin-bottom:6px; }
+  .optional { color:var(--muted); font-weight:400; font-size:.82rem; }
+  input, select, textarea { width:100%; padding:11px 12px; border:1px solid #cbd6e2; border-radius:10px; font:inherit; color:var(--ink); background:#fff; }
+  input:focus, select:focus, textarea:focus { outline:3px solid #d9e7ff; border-color:var(--blue); }
+  textarea { min-height:108px; resize:vertical; }
+  .field-error { color:var(--red); min-height:18px; font-size:.82rem; margin-top:4px; }
+  .field-note { color:var(--muted); font-size:.82rem; margin-top:5px; }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+  .chip { display:inline-flex; align-items:center; gap:7px; border:1px solid #cbd8e8; border-radius:999px; padding:6px 10px; background:#f7faff; font-size:.88rem; }
+  .chip button { border:0; background:transparent; color:#52657a; cursor:pointer; font-size:1rem; padding:0 2px; }
+  .suggestions { display:flex; flex-wrap:wrap; gap:7px; margin-top:9px; }
+  .suggestions button { background:#fff; border:1px dashed #aebfd2; color:#36506a; padding:6px 10px; border-radius:999px; cursor:pointer; font:inherit; font-size:.83rem; }
+  .suggestions button:hover { border-color:var(--blue); color:var(--blue-dark); }
+  .checks { display:grid; gap:12px; margin-top:18px; }
+  .check-row { display:flex; align-items:flex-start; gap:10px; font-size:.91rem; color:#34495e; }
+  .check-row input { width:auto; margin-top:5px; }
+  .check-row label { font-weight:400; margin:0; }
+  .check-row strong { font-weight:650; }
+  .actions { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:26px; padding-top:18px; border-top:1px solid var(--line); }
+  .actions-right { display:flex; gap:10px; }
+  button.primary, button.secondary, button.ghost { border-radius:10px; padding:10px 16px; font:inherit; font-weight:700; cursor:pointer; }
+  button.primary { background:var(--blue); color:#fff; border:1px solid var(--blue); }
+  button.primary:hover { background:var(--blue-dark); }
+  button.secondary { background:#fff; color:var(--ink); border:1px solid #cbd6e2; }
+  button.ghost { background:transparent; color:var(--muted); border:1px solid transparent; }
+  button:disabled { opacity:.45; cursor:not-allowed; }
+  .review-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+  .review-item { background:#f7f9fc; border:1px solid var(--line); border-radius:10px; padding:12px; overflow-wrap:anywhere; }
+  .review-item small { display:block; color:var(--muted); margin-bottom:4px; }
+  .review-item strong { font-weight:650; white-space:pre-wrap; }
+  .score-box { display:flex; align-items:center; gap:16px; background:#eef5ff; border:1px solid #d5e4ff; border-radius:14px; padding:16px; margin-bottom:18px; }
+  .score-number { font-size:2rem; line-height:1; font-weight:800; color:var(--blue-dark); min-width:82px; }
+  .score-box p { margin:3px 0 0; color:#3d5673; font-size:.9rem; }
+  .result { display:none; padding:24px; }
+  .result.active { display:block; }
+  .result h2 { margin:0 0 5px; }
+  .result p { color:var(--muted); }
+  .result-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:20px; }
+  .privacy { color:var(--muted); font-size:.82rem; margin-top:17px; }
+  footer { padding:0 0 28px; color:var(--muted); font-size:.85rem; }
+  .hidden { display:none !important; }
+  @media(max-width:640px) {
+    .grid,.review-grid { grid-template-columns:1fr; }
+    .panel-head,form { padding-left:17px; padding-right:17px; }
+    .progress-wrap,.steps { padding-left:17px; padding-right:17px; }
+    .steps { gap:5px; }
+    .step-tag { font-size:.72rem; padding:7px 3px; }
+    .actions { align-items:stretch; }
+    .actions-right { margin-left:auto; }
+    .score-box { align-items:flex-start; }
+  }
+  @media print {
+    body { background:white; }
+    header { background:white; color:#111; padding:0 0 18px; }
+    .hero p,.brand span { color:#333; }
+    main { width:100%; padding:0; }
+    .notice,.progress-wrap,.steps,form,footer,.result-actions { display:none !important; }
+    .panel { box-shadow:none; border:0; }
+    .result { display:block !important; padding:0; }
+    .score-box { background:#fff; }
+  }
 </style>
 </head>
 <body>
-<div class="ttp" id="ttp"></div>
-
-<nav>
-  <div class="logo">Digi<b>Apply</b></div>
-  <span class="nbadge">DIGITAL CAREER PORTAL</span>
-</nav>
-
-<div class="hero">
-  <div class="hw">
-    <div class="htag">India's Digital Job Application Practice Platform</div>
-    <h1>Practice Smarter.<br><b>Apply Digitally. Get Hired.</b></h1>
-    <p>DigiApply is India's free digital platform to practice real job application forms. Get live validation, recruiter tips, mistake alerts and a profile score — so you apply with confidence every time.</p>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px"><span style="background:rgba(52,211,153,.15);border:1px solid rgba(52,211,153,.3);color:#6EE7B7;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px">&#9679; Digital Profile Builder</span><span style="background:rgba(52,211,153,.15);border:1px solid rgba(52,211,153,.3);color:#6EE7B7;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px">&#9679; AI-Powered Tips</span><span style="background:rgba(52,211,153,.15);border:1px solid rgba(52,211,153,.3);color:#6EE7B7;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px">&#9679; Live Score Tracker</span></div>
-    <div class="stats">
-      <div><div class="sn">6</div><div class="sl">Sections</div></div>
-      <div><div class="sn">25+</div><div class="sl">Fields</div></div>
-      <div><div class="sn">50+</div><div class="sl">Tips</div></div>
-      <div><div class="sn">100%</div><div class="sl">Free</div></div>
+<header>
+  <div class="header-inner">
+    <div class="brand">Digi<span>Career</span> <span aria-hidden="true">by DigiCafe</span></div>
+    <div class="hero">
+      <h1>Prepare better. Apply confidently.</h1>
+      <p>Practise your job application profile, review the details, and identify areas to improve before applying to an employer.</p>
     </div>
   </div>
-</div>
-
-<div class="stbar">
-  <div class="stinner">
-    <div class="si"><div class="sdot on" id="d1">1</div><span class="slbl on" id="l1">Basic Info</span></div>
-    <div class="sline" id="ln1"></div>
-    <div class="si"><div class="sdot" id="d2">2</div><span class="slbl" id="l2">Experience</span></div>
-    <div class="sline" id="ln2"></div>
-    <div class="si"><div class="sdot" id="d3">3</div><span class="slbl" id="l3">Industries</span></div>
-    <div class="sline" id="ln3"></div>
-    <div class="si"><div class="sdot" id="d4">4</div><span class="slbl" id="l4">Roles&amp;Skills</span></div>
-    <div class="sline" id="ln4"></div>
-    <div class="si"><div class="sdot" id="d5">5</div><span class="slbl" id="l5">Profile</span></div>
-    <div class="sline" id="ln5"></div>
-    <div class="si"><div class="sdot" id="d6">6</div><span class="slbl" id="l6">Submit</span></div>
-  </div>
-</div>
-
-<div class="main">
-<div>
-
-<div class="donewrap" id="donewrap">
-  <div class="donecard">
-    <div class="dicon">&#127881;</div>
-    <div class="dttl">Practice Complete!</div>
-    <div class="dsub">Here is how your profile scores against recruiter expectations.</div>
-    <div class="dscore" id="fscore">--</div>
-    <div class="dscorel">Overall Profile Score</div>
-    <div class="dgrid">
-      <div class="dstat"><div class="dsv" id="rf">-</div><div class="dsl">Fields</div></div>
-      <div class="dstat"><div class="dsv" id="rs">-</div><div class="dsl">Skills</div></div>
-      <div class="dstat"><div class="dsv" id="ri">-</div><div class="dsl">Industries</div></div>
-      <div class="dstat"><div class="dsv" id="rr">-</div><div class="dsl">Roles</div></div>
+</header>
+<main>
+  <div class="notice"><strong>Practice mode:</strong> This page runs in your browser. It does not submit your profile to employers, upload your CV, or use an AI service. Avoid entering sensitive personal information.</div>
+  <section class="panel" id="formPanel" aria-labelledby="formTitle">
+    <div class="panel-head">
+      <h2 id="formTitle">Job application practice</h2>
+      <p>Complete the sections below. Fields marked optional can be left blank.</p>
     </div>
-    <div class="fbbox">
-      <div class="fbttl">&#128203; Detailed Feedback</div>
-      <div id="fblist"></div>
+    <div class="progress-wrap">
+      <div class="progress-meta"><span id="stepLabel">Step 1 of 4</span><span id="progressPercent">25% complete</span></div>
+      <div class="progress" role="progressbar" aria-label="Form progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25" id="progressBar"><div class="progress-fill" id="progressFill"></div></div>
     </div>
-    <button class="restbtn" onclick="doRestart()">&#128260; Practice Again on DigiApply</button>
-  </div>
-</div>
-
-<div class="pg on" id="p1">
-<div class="card">
-  <div class="ch"><div><div class="ct">&#128100; Basic Personal Information</div><div class="csub">How recruiters identify and contact you</div></div><span class="cn">Step 1 of 6</span></div>
-  <div class="cb">
-    <div class="errbox" id="er1"></div>
-    <div class="fld">
-      <div class="lbl">Full Name <span class="req">*</span> <em class="ico" onclick="tip(this,'Legal name: First + Last name. E.g. Vikash Pathak. Recruiters verify this during background checks.')">?</em></div>
-      <input type="text" id="nm" placeholder="e.g. Vikash Pathak" oninput="lvNm(this)">
-      <div class="ferr" id="enm">Please enter first name AND last name (e.g. Vikash Pathak)</div>
-      <div class="fok" id="oknm">&#10003; Name looks good!</div>
+    <div class="steps" aria-label="Sections">
+      <div class="step-tag active" data-step-tag="0">1. Profile</div>
+      <div class="step-tag" data-step-tag="1">2. Role</div>
+      <div class="step-tag" data-step-tag="2">3. Experience</div>
+      <div class="step-tag" data-step-tag="3">4. Review</div>
     </div>
-    <div class="g2">
-      <div class="fld">
-        <div class="lbl">Email <span class="req">*</span> <em class="ico" onclick="tip(this,'Professional: firstname.lastname@gmail.com. Recruiters judge email ID. Avoid coolboy@ or funky123@.')">?</em></div>
-        <input type="email" id="em" placeholder="yourname@gmail.com" oninput="lvEm(this)">
-        <div class="ferr" id="eem">Enter a valid email address</div>
-        <div class="fok" id="okem">&#10003; Valid email!</div>
-      </div>
-      <div class="fld">
-        <div class="lbl">WhatsApp / Mobile <span class="req">*</span> <em class="ico" onclick="tip(this,'Most recruiters WhatsApp before calling. Enter 10 digits only without +91.')">?</em></div>
-        <div class="phw">
-          <input type="text" class="phcc" value="+91" readonly>
-          <input type="tel" id="ph" placeholder="10-digit number" oninput="lvPh(this)" maxlength="10">
+    <form id="practiceForm" novalidate>
+      <section class="step-pane active" data-step="0">
+        <h3>Basic profile</h3>
+        <p class="hint">Use only the details you would normally include in a job application. Date of birth and full home address are not needed for this practice exercise.</p>
+        <div class="grid">
+          <div class="field">
+            <label for="fullName">Full name *</label>
+            <input id="fullName" name="fullName" autocomplete="name" maxlength="100" required placeholder="e.g. Vikash Pathak">
+            <div class="field-error" id="fullNameError"></div>
+          </div>
+          <div class="field">
+            <label for="email">Email address *</label>
+            <input id="email" name="email" type="email" autocomplete="email" maxlength="160" required placeholder="you@example.com">
+            <div class="field-error" id="emailError"></div>
+          </div>
+          <div class="field">
+            <label for="phone">Phone number <span class="optional">(optional)</span></label>
+            <input id="phone" name="phone" type="tel" autocomplete="tel" maxlength="25" placeholder="+91 98765 43210">
+            <div class="field-note">Add a contact number only if you want it included in your practice summary.</div>
+            <div class="field-error" id="phoneError"></div>
+          </div>
+          <div class="field">
+            <label for="city">City / location <span class="optional">(optional)</span></label>
+            <input id="city" name="city" maxlength="100" placeholder="e.g. Bengaluru">
+          </div>
+          <div class="field full">
+            <label for="linkedin">LinkedIn profile <span class="optional">(optional)</span></label>
+            <input id="linkedin" name="linkedin" type="url" maxlength="250" placeholder="https://www.linkedin.com/in/your-profile">
+            <div class="field-error" id="linkedinError"></div>
+          </div>
         </div>
-        <div class="ferr" id="eph">Enter a valid 10-digit mobile number</div>
-        <div class="fok" id="okph">&#10003; Valid number!</div>
-      </div>
-    </div>
-    <div class="g2">
-      <div class="fld">
-        <div class="lbl">Date of Birth <em class="ico" onclick="tip(this,'Always tick Hide DOB from employers on real portals. Prevents age-based screening before they meet you.')">?</em></div>
-        <input type="date" id="dob" onchange="updSc()">
-        <div class="fhint">Tip: Enable Hide DOB from employers</div>
-      </div>
-      <div class="fld">
-        <div class="lbl">Gender <span class="req">*</span></div>
-        <div class="rrow">
-          <div class="ro"><input type="radio" name="gnd" id="gm" value="M"><label for="gm">Male</label></div>
-          <div class="ro"><input type="radio" name="gnd" id="gf" value="F"><label for="gf">Female</label></div>
-          <div class="ro"><input type="radio" name="gnd" id="go" value="O"><label for="go">Other</label></div>
+      </section>
+      <section class="step-pane" data-step="1">
+        <h3>Target role</h3>
+        <p class="hint">Choose the kind of role you want to practise applying for.</p>
+        <div class="grid">
+          <div class="field">
+            <label for="targetRole">Target job title *</label>
+            <select id="targetRole" name="targetRole" required>
+              <option value="">Select a role</option>
+              <option>Accounts Executive</option>
+              <option>GST Executive</option>
+              <option>Reconciliation Analyst</option>
+              <option>Accounts Payable (AP) Executive</option>
+              <option>Accounts Receivable (AR) Executive</option>
+              <option>R2R / General Ledger Analyst</option>
+              <option>Finance Executive</option>
+              <option>Other</option>
+            </select>
+            <div class="field-error" id="targetRoleError"></div>
+          </div>
+          <div class="field">
+            <label for="experience">Total experience *</label>
+            <select id="experience" name="experience" required>
+              <option value="">Select experience</option>
+              <option>Fresher</option><option>Less than 1 year</option><option>1–2 years</option>
+              <option>3–5 years</option><option>6–8 years</option><option>9+ years</option>
+            </select>
+            <div class="field-error" id="experienceError"></div>
+          </div>
+          <div class="field">
+            <label for="salary">Expected annual CTC (₹ LPA) <span class="optional">(optional)</span></label>
+            <input id="salary" name="salary" type="number" min="0" max="1000" step="0.1" placeholder="e.g. 6.0">
+            <div class="field-note">Use the figure that fits your role, location, skills and current market conditions.</div>
+            <div class="field-error" id="salaryError"></div>
+          </div>
+          <div class="field">
+            <label for="notice">Notice period <span class="optional">(optional)</span></label>
+            <select id="notice" name="notice">
+              <option value="">Select notice period</option><option>Immediate</option><option>15 days</option>
+              <option>30 days</option><option>45 days</option><option>60 days</option><option>More than 60 days</option>
+            </select>
+          </div>
+        </div>
+      </section>
+      <section class="step-pane" data-step="2">
+        <h3>Skills and experience</h3>
+        <p class="hint">Describe relevant experience honestly. Add skills that you can explain or demonstrate in an interview.</p>
+        <div class="grid">
+          <div class="field full">
+            <label for="skillsInput">Relevant skills *</label>
+            <input id="skillsInput" autocomplete="off" maxlength="60" placeholder="Type a skill and select Add">
+            <div class="suggestions" id="skillSuggestions" aria-label="Suggested skills"></div>
+            <div class="actions" style="border:0;padding:0;margin-top:9px;justify-content:flex-start">
+              <button class="secondary" type="button" id="addSkillBtn">Add skill</button>
+            </div>
+            <div class="chips" id="skillChips" aria-live="polite"></div>
+            <div class="field-error" id="skillsError"></div>
+          </div>
+          <div class="field full">
+            <label for="summary">Professional summary <span class="optional">(optional)</span></label>
+            <textarea id="summary" name="summary" maxlength="900" placeholder="Write 2–4 sentences about your experience, core skills and the value you can bring to the role."></textarea>
+            <div class="field-note"><span id="summaryCount">0</span>/900 characters. Avoid generic claims; use specific duties, tools and results where possible.</div>
+          </div>
+          <div class="field full">
+            <label for="achievement">Relevant achievement or responsibility <span class="optional">(optional)</span></label>
+            <textarea id="achievement" name="achievement" maxlength="700" placeholder="Example: Reconciled bank and payment gateway transactions, investigated unmatched entries, and prepared supporting reports."></textarea>
+          </div>
+          <div class="field full">
+            <label for="resumeName">CV file name <span class="optional">(optional, text only)</span></label>
+            <input id="resumeName" name="resumeName" maxlength="180" placeholder="e.g. Vikash_Pathak_Accounts_Resume.pdf">
+            <div class="field-note">This tool does not upload or attach a CV. Use this field only as a reminder of the file you plan to submit.</div>
+          </div>
+        </div>
+        <div class="checks">
+          <div class="check-row">
+            <input id="accurate" type="checkbox">
+            <label for="accurate"><strong>Accuracy check:</strong> I will verify that the details in my actual application are accurate and supportable.</label>
+          </div>
+        </div>
+        <div class="field-error" id="accurateError"></div>
+      </section>
+      <section class="step-pane" data-step="3">
+        <h3>Review your practice profile</h3>
+        <p class="hint">Check for missing or unclear details before creating your local summary.</p>
+        <div id="reviewContent"></div>
+      </section>
+      <div class="actions" id="formActions">
+        <button type="button" class="ghost" id="resetBtn">Start over</button>
+        <div class="actions-right">
+          <button type="button" class="secondary hidden" id="backBtn">Back</button>
+          <button type="button" class="primary" id="nextBtn">Continue</button>
+          <button type="button" class="primary hidden" id="createBtn">Create practice summary</button>
         </div>
       </div>
-    </div>
-    <div class="fld">
-      <div class="lbl">Current City <span class="req">*</span> <em class="ico" onclick="tip(this,'Recruiters filter by city. Always enter your current location accurately.')">?</em></div>
-      <input type="text" id="cy" placeholder="e.g. Bengaluru, Karnataka" oninput="updSc()">
-      <div class="fhint">Your current city of residence</div>
-    </div>
-  </div>
-  <div class="cf">
-    <span style="font-size:12px;color:var(--muted)">* Required fields</span>
-    <button class="btn btnp" onclick="nxt(1)">Next: Experience &#8594;</button>
-  </div>
-</div>
-</div>
-
-<div class="pg" id="p2">
-<div class="card">
-  <div class="ch"><div><div class="ct">&#128188; Work Experience &amp; Salary</div><div class="csub">Recruiters shortlist based on these first</div></div><span class="cn">Step 2 of 6</span></div>
-  <div class="cb">
-    <div class="errbox" id="er2"></div>
-    <div class="fld">
-      <div class="lbl">Profile Type <span class="req">*</span></div>
-      <div class="rrow">
-        <div class="ro"><input type="radio" name="pt" id="ptw" value="wp"><label for="ptw">&#128188; Working Professional</label></div>
-        <div class="ro"><input type="radio" name="pt" id="ptf" value="fr"><label for="ptf">&#127891; Fresher</label></div>
+    </form>
+    <section class="result" id="resultPanel" aria-live="polite">
+      <h2>Your practice summary</h2>
+      <p>This summary is generated locally in your browser. It is not an employability rating and does not predict interview or job outcomes.</p>
+      <div id="resultContent"></div>
+      <div class="result-actions">
+        <button class="primary" type="button" id="downloadBtn">Download summary (.txt)</button>
+        <button class="secondary" type="button" id="printBtn">Print / Save as PDF</button>
+        <button class="secondary" type="button" id="editBtn">Edit answers</button>
+        <button class="ghost" type="button" id="newBtn">Start a new profile</button>
       </div>
-    </div>
-    <div class="g2">
-      <div class="fld">
-        <div class="lbl">Total Experience <span class="req">*</span> <em class="ico" onclick="tip(this,'Include internships. Must exactly match your resume - inconsistency is a red flag.')">?</em></div>
-        <div style="display:flex;gap:8px">
-          <div style="flex:1"><input type="number" id="eyr" placeholder="Years" min="0" max="40" oninput="updSc()"><div class="fhint" style="font-size:10px">Years</div></div>
-          <div style="flex:1"><input type="number" id="emo" placeholder="0-11" min="0" max="11" oninput="updSc()"><div class="fhint" style="font-size:10px">Months</div></div>
-        </div>
-      </div>
-      <div class="fld">
-        <div class="lbl">Notice Period <span class="req">*</span> <em class="ico" onclick="tip(this,'Shorter = more callbacks. 15 Days or Immediate gets first preference from recruiters.')">?</em></div>
-        <select id="ntp" onchange="updSc()">
-          <option value="">Select notice period</option>
-          <option>Immediate Joiner</option>
-          <option>15 Days</option>
-          <option>1 Month</option>
-          <option>2 Months</option>
-          <option>3 Months</option>
-          <option>More than 3 Months</option>
-        </select>
-      </div>
-    </div>
-    <div class="fld">
-      <div class="lbl">Current Annual CTC <span class="req">*</span> <em class="ico" onclick="tip(this,'CTC = Cost to Company. Includes salary + PF + bonus + all benefits. Do NOT enter take-home or monthly amount.')">?</em></div>
-      <div class="pfxw"><span class="pfx">INR</span><input type="number" id="sal" placeholder="e.g. 485866" oninput="onSal()"></div>
-      <div class="fhint">Annual CTC in rupees. NOT monthly. NOT take-home.</div>
-      <div class="sdisp" id="sald"></div>
-    </div>
-    <div class="fld">
-      <div class="lbl">Expected Annual CTC <em class="ico" onclick="tip(this,'Ask for 30-50% above current when switching. Never quote below your current CTC.')">?</em></div>
-      <div class="pfxw"><span class="pfx">INR</span><input type="number" id="exsal" placeholder="e.g. 700000" oninput="onExSal()"></div>
-      <div class="sdisp" id="exd"></div>
-      <div class="hdisp" id="hkd"></div>
-    </div>
-  </div>
-  <div class="cf">
-    <button class="btn btng" onclick="prv(2)">&#8592; Back</button>
-    <button class="btn btnp" onclick="nxt(2)">Next: Industries &#8594;</button>
-  </div>
-</div>
-</div>
-
-<div class="pg" id="p3">
-<div class="card">
-  <div class="ch"><div><div class="ct">&#127981; Preferred Industries</div><div class="csub">Select where your skills are most valued</div></div><span class="cn">Step 3 of 6</span></div>
-  <div class="cb">
-    <div class="errbox" id="er3"></div>
-    <div class="ibox ib-blue">&#128161; <strong>Tip:</strong> Select 3-6 industries. Too few = missed opportunities. Too many = unfocused profile. Accounting + Fintech + E-commerce covers most finance openings.</div>
-    <div class="igrid" id="igrid"></div>
-    <div id="icnt" style="font-size:12px;color:var(--muted);margin-top:9px;font-weight:600"></div>
-  </div>
-  <div class="cf">
-    <button class="btn btng" onclick="prv(3)">&#8592; Back</button>
-    <button class="btn btnp" onclick="nxt(3)">Next: Roles &amp; Skills &#8594;</button>
-  </div>
-</div>
-</div>
-
-<div class="pg" id="p4">
-<div class="card">
-  <div class="ch"><div><div class="ct">&#128295; Job Roles &amp; Skills</div><div class="csub">Keywords that get your profile found by recruiters</div></div><span class="cn">Step 4 of 6</span></div>
-  <div class="cb">
-    <div class="errbox" id="er4"></div>
-    <div class="fld">
-      <div class="lbl">Preferred Job Roles <span class="req">*</span> <em class="ico" onclick="tip(this,'Each role = a separate recruiter search. Accounts Executive and AR Analyst are different searches - select both!')">?</em></div>
-      <div class="ibox ib-blue" style="font-size:12px">Select 4-6 roles. Each is a keyword recruiters search on Naukri and LinkedIn.</div>
-      <div class="rlist" id="rlist"></div>
-      <div id="rcnt" style="font-size:12px;color:var(--muted);margin-top:6px;font-weight:600"></div>
-    </div>
-    <div class="divider"></div>
-    <div class="fld">
-      <div class="lbl">Key Skills <span class="req">*</span> <em class="ico" onclick="tip(this,'Skills are the most powerful search filter on Naukri. Be specific: Bank Reconciliation beats just Accounting. Aim for 12-20 skills.')">?</em></div>
-      <div class="ibox ib-amber" style="font-size:12px">Type a skill and press <strong>Enter</strong> to add. Click suggestions to add quickly. Aim for 12-20 skills.</div>
-      <div class="tagw">
-        <div class="tarea" id="tarea" onclick="document.getElementById('tinp').focus()">
-          <input type="text" class="tinp" id="tinp" placeholder="Type a skill and press Enter..." onkeydown="tkKey(event)" oninput="tkSug(this.value)" onblur="setTimeout(hideSug,180)">
-        </div>
-        <div class="sugg" id="sugg"></div>
-      </div>
-      <div id="skcnt" style="font-size:12px;color:var(--muted);margin-top:6px;font-weight:600"></div>
-    </div>
-  </div>
-  <div class="cf">
-    <button class="btn btng" onclick="prv(4)">&#8592; Back</button>
-    <button class="btn btnp" onclick="nxt(4)">Next: Profile &#8594;</button>
-  </div>
-</div>
-</div>
-
-<div class="pg" id="p5">
-<div class="card">
-  <div class="ch"><div><div class="ct">&#128279; Online Presence &amp; Profile</div><div class="csub">Recruiters check these before calling you</div></div><span class="cn">Step 5 of 6</span></div>
-  <div class="cb">
-    <div class="ibox ib-green" style="margin-bottom:14px">&#128202; <strong>Fact:</strong> 87% of recruiters check LinkedIn before calling. Profiles with a LinkedIn URL get 40% more responses.</div>
-    <div class="fld">
-      <div class="lbl">LinkedIn URL <em class="ico" onclick="tip(this,'Go to LinkedIn > Edit public profile URL > Customize to linkedin.com/in/yourname. Looks professional.')">?</em></div>
-      <input type="url" id="li" placeholder="https://in.linkedin.com/in/yourname" oninput="lvLi(this)">
-      <div class="fhint">Customize: linkedin.com/in/firstname-lastname</div>
-      <div class="ferr" id="eli">URL must contain linkedin.com/in/ to be valid</div>
-      <div class="fok" id="okli">&#10003; Valid LinkedIn URL!</div>
-    </div>
-    <div class="fld">
-      <div class="lbl">Highest Qualification <span class="req">*</span></div>
-      <select id="edu" onchange="updSc()">
-        <option value="">Select your highest degree</option>
-        <option>10th / SSC</option>
-        <option>12th / HSC / Intermediate</option>
-        <option>Diploma</option>
-        <option>Bachelor's Degree (B.Com / BBA / B.Sc etc.)</option>
-        <option>Master's Degree (M.Com / MBA / M.Sc etc.)</option>
-        <option>CA / CMA / CS</option>
-        <option>PhD / Doctorate</option>
-      </select>
-    </div>
-    <div class="fld">
-      <div class="lbl">Certifications <em class="ico" onclick="tip(this,'Short courses count: GST Practitioner, Tally Certified, SAP FICO. These help you stand out.')">?</em></div>
-      <textarea id="certs" placeholder="Tax Pro Professional - GST &amp; Direct Tax | ITAA Education&#10;Tally Prime Certified&#10;GST Practitioner Course" rows="3"></textarea>
-      <div class="fhint">One per line. Include institution name.</div>
-    </div>
-    <div class="fld">
-      <div class="lbl">Professional Summary <em class="ico" onclick="tip(this,'3-4 sentences: years of experience + top skills + industry + target role. Recruiters read this in 10 seconds to decide whether to call.')">?</em></div>
-      <textarea id="summ" rows="4" placeholder="Finance professional with 6+ years in bank reconciliation, payment gateway reconciliation, AP/AR, GST/TDS and MIS reporting. Currently Senior Accounts Executive at Ebix Travels. Proficient in Advanced Excel and Tally ERP. Seeking Finance Executive roles in Bengaluru." oninput="cntCh(this,'scc',600);updSc()"></textarea>
-      <div class="cc" id="scc">0 / 600</div>
-      <div class="fhint">Aim for 100-250 characters. Clear and specific.</div>
-    </div>
-  </div>
-  <div class="cf">
-    <button class="btn btng" onclick="prv(5)">&#8592; Back</button>
-    <button class="btn btnp" onclick="nxt(5)">Next: Final Step &#8594;</button>
-  </div>
-</div>
-</div>
-
-<div class="pg" id="p6">
-<div class="card">
-  <div class="ch"><div><div class="ct">&#9989; Review &amp; Submit</div><div class="csub">Check your details then submit to see your score</div></div><span class="cn">Step 6 of 6</span></div>
-  <div class="cb">
-    <div class="revbox" id="revbox"></div>
-    <div class="fld">
-      <div class="lbl">Declarations <span class="req">*</span></div>
-      <div class="ibox ib-red" style="margin-bottom:11px;font-size:12.5px">&#9888; <strong>Practice Tip:</strong> Always read each consent box carefully on real portals. Know what data you are sharing and with whom before ticking.</div>
-      <div class="conl">
-        <label class="ci"><input type="checkbox" id="c1" onchange="chkCon()"><span>I agree to the <strong>Terms &amp; Conditions</strong> of the portal</span></label>
-        <label class="ci"><input type="checkbox" id="c2" onchange="chkCon()"><span>I consent to using my information and resume for <strong>recruitment purposes</strong></span></label>
-        <label class="ci"><input type="checkbox" id="c3" onchange="chkCon()"><span>I agree to be contacted by <strong>call, email, or WhatsApp</strong> for recruitment</span></label>
-        <label class="ci"><input type="checkbox" id="c4" onchange="chkCon()"><span>I certify all information is <strong>true and correct</strong></span></label>
-      </div>
-      <div class="errbox" id="ercon" style="margin-top:10px"></div>
-    </div>
-    <div class="fld">
-      <div class="lbl">Upload Resume <em class="ico" onclick="tip(this,'Filename: YourName_Resume.pdf NOT resume_final_v3.pdf. Recruiters judge by filename too.')">?</em></div>
-      <input type="file" id="res" accept=".pdf,.doc,.docx">
-      <div class="fhint">PDF, DOC, DOCX only. Max 2MB. Name it: YourName_Resume.pdf</div>
-    </div>
-  </div>
-  <div class="cf">
-    <button class="btn btng" onclick="prv(6)">&#8592; Back</button>
-    <button class="btn btns" onclick="doSub()">&#128640; Submit &amp; See My Score</button>
-  </div>
-</div>
-</div>
-
-</div>
-
-<div class="sidebar">
-  <div class="sccard">
-    <div class="scttl">LIVE PROFILE SCORE</div>
-    <div class="scrow"><div class="sclbl"><span>Basic Info</span><span id="sc1">0%</span></div><div class="sctrack"><div class="scbar c1" id="sb1" style="width:0%"></div></div></div>
-    <div class="scrow"><div class="sclbl"><span>Experience</span><span id="sc2">0%</span></div><div class="sctrack"><div class="scbar c2" id="sb2" style="width:0%"></div></div></div>
-    <div class="scrow"><div class="sclbl"><span>Industries</span><span id="sc3">0%</span></div><div class="sctrack"><div class="scbar c3" id="sb3" style="width:0%"></div></div></div>
-    <div class="scrow"><div class="sclbl"><span>Skills</span><span id="sc4">0%</span></div><div class="sctrack"><div class="scbar c1" id="sb4" style="width:0%"></div></div></div>
-    <div class="scrow"><div class="sclbl"><span>Online Presence</span><span id="sc5">0%</span></div><div class="sctrack"><div class="scbar c2" id="sb5" style="width:0%"></div></div></div>
-  </div>
-  <div class="tipcard">
-    <div class="tipttl" id="tipttl">Tips: Basic Information</div>
-    <div id="tipbody">
-      <div class="tipitem"><div class="tipdot"></div>Legal name: First AND Last name required</div>
-      <div class="tipitem"><div class="tipdot"></div>Professional email: firstname.lastname@gmail.com</div>
-      <div class="tipitem"><div class="tipdot"></div>Provide WhatsApp-enabled primary number</div>
-      <div class="tipitem"><div class="tipdot"></div>Always hide DOB from employers on real portals</div>
-    </div>
-  </div>
-  <div class="miscard">
-    <div class="misttl">&#9888; Common Mistakes</div>
-    <div id="misbody">
-      <div class="misitem">Using unprofessional email IDs</div>
-      <div class="misitem">Entering take-home instead of CTC</div>
-      <div class="misitem">Leaving skills section empty</div>
-      <div class="misitem">Not customizing LinkedIn URL</div>
-      <div class="misitem">No profile summary or too generic</div>
-    </div>
-  </div>
-</div>
-</div>
-
+      <p class="privacy">Privacy note: no server submission or cloud storage is implemented in this demo. Your entries remain in this page while it is open; refreshing or closing the page may clear them.</p>
+    </section>
+  </section>
+</main>
+<footer>© <span id="year"></span> DigiCareer by DigiCafe · Job application practice tool</footer>
 <script>
-var skls=[],cur=1;
-var INDS=["Accounting / CA Firm","Banking / Financial Services","Accounting BPO / Bookkeeping","Taxation Firm / Tax BPO","E-Commerce / Online Marketplace","Travel & Tourism / Hospitality","IT / Software / Tech","ITES / BPO / KPO / Outsourcing","NBFC / Fintech","Insurance","Manufacturing / FMCG","Retail / Wholesale","Real Estate / Construction","Healthcare / Pharma","Education / EdTech","Logistics / Supply Chain","Consulting / Strategy","Telecom / ISP","Government / PSU","Automobile / Automotive","Media & Entertainment","NGO / Social Services"];
-var ROLES=[{c:"Accounting / Audit / Tax",r:["Accountant / Accounts Executive","Senior Accounts Executive","Accounts Payable Executive / Manager","Accounts Receivable Executive / Manager","Executive - Finance & Accounts","Manager - Finance & Accounts","Taxation Executive / Manager","Internal Auditor","Accounts Assistant / Bookkeeper"]},{c:"Corporate Finance",r:["Finance Manager","Finance Controller","Financial Analyst","MIS Executive","Payroll Executive"]},{c:"Operations / Reconciliation",r:["Operations Executive","Transaction Processing Executive","Reconciliation Analyst","R2R Analyst (Record to Report)","Payment Operations Executive"]}];
-var SKPOOL=["Bank Reconciliation","Payment Gateway Reconciliation","Vendor Reconciliation","Customer Reconciliation","Accounts Payable","Accounts Receivable","GST","TDS","MIS Reporting","Advanced Excel","Tally ERP","Tally Prime","SAP FICO","SAP Basic","Record to Report","R2R","Month-End Closing","Journal Entries","General Ledger","Ledger Scrutiny","Cash Application","GSTR-1","GSTR-3B","GSTR Filing","Advance Tax","Income Tax","ITR Filing","Financial Statements","Balance Sheet Reconciliation","Audit Support","VLOOKUP","Pivot Tables","SUMIFS","COUNTIFS","Power BI","SQL","Financial Reporting","Cash Flow","Accruals","Debtors Management","Creditors Management","Company Compliance","ROC Filing","PF Compliance","ESIC Compliance","Refund Processing","Settlement Validation","Invoice Processing","Collections","AR Aging"];
-var TIPS=[{t:"Tips: Basic Information",b:["Legal name with First AND Last name required","Professional email: firstname.lastname@gmail.com","Provide WhatsApp-enabled primary number","Always hide DOB from employers on real portals"]},{t:"Tips: Work Experience",b:["Enter CTC (total cost) NOT take-home salary","Shorter notice period = more recruiter calls","Ask for 30-50% hike from current CTC","Experience in form MUST match your resume"]},{t:"Tips: Industries",b:["Select 3-6 industries for a focused profile","Accounting + Fintech + E-commerce = most openings","Too many industries looks scattered","Travel experience is valued in OTA / travel firms"]},{t:"Tips: Roles & Skills",b:["Each role = a separate recruiter search query","Skills are most powerful filter on Naukri","Specific skills beat generic ones always","Aim for 12-20 skills for best visibility"]},{t:"Tips: Online Presence",b:["Customize LinkedIn URL - looks professional","LinkedIn profile must match your resume","Professional photo = 3x more profile views","Write a clear 3-sentence LinkedIn summary"]},{t:"Final Review Tips",b:["Read all consent boxes before ticking","Resume filename: YourName_Resume.pdf","Double-check name and email spelling","Your profile goes live immediately"]}];
-var MIST=[["Using unprofessional email IDs","Not providing WhatsApp number","Not hiding DOB from employers","Entering nickname instead of legal name"],["Monthly salary instead of annual CTC","Not adding expected salary","Long notice when negotiable","Fresher applying for senior roles"],["Not selecting any industry","Selecting 10+ random industries","Missing core industry like Accounting","Not selecting ITES/BPO for finance ops"],["Adding only 2-3 skills","Vague skills like MS Office only","Not adding skills from target JD","Not selecting enough job roles"],["Leaving LinkedIn blank","Default URL not customized","No or very short profile summary","Resume named final_final_v2.pdf"],["Not reading consent boxes","Ticking all without understanding","Not certifying accuracy","Uploading wrong file as resume"]];
+(() => {
+  "use strict";
+  const $ = (id) => document.getElementById(id);
+  const panes = Array.from(document.querySelectorAll(".step-pane"));
+  const tags = Array.from(document.querySelectorAll("[data-step-tag]"));
+  const form = $("practiceForm");
+  const suggestions = [
+    "Bank Reconciliation","Payment Gateway Reconciliation","GST Reconciliation","TDS",
+    "Accounts Payable","Accounts Receivable","General Ledger","Journal Entries",
+    "Tally Prime","Advanced Excel","Pivot Tables","VLOOKUP / XLOOKUP","MIS Reporting",
+    "Invoice Processing","Vendor Payments","Month-end Closing","Financial Reporting"
+  ];
+  const skills = new Set();
+  let currentStep = 0;
+  let summaryText = "";
 
-window.onload=function(){bInd();bRoles();updSidebar(1);};
+  $("year").textContent = new Date().getFullYear();
 
-function bInd(){var g=document.getElementById("igrid");g.innerHTML="";INDS.forEach(function(x,i){g.innerHTML+='<div class="ic"><input type="checkbox" id="ic'+i+'" value="'+x+'" onchange="iCh()"><label for="ic'+i+'">'+x+'</label></div>';});}
-function bRoles(){var l=document.getElementById("rlist");l.innerHTML="";ROLES.forEach(function(cat){l.innerHTML+='<div class="rcat">'+cat.c+'</div>';cat.r.forEach(function(r){var id="r"+r.replace(/[^a-z]/gi,"").toLowerCase().slice(0,14);l.innerHTML+='<div class="rc"><input type="checkbox" id="'+id+'" value="'+r+'" onchange="rCh()"><label for="'+id+'">'+r+'</label></div>';});});}
-
-function nxt(n){
-  // Show inline warnings — never fully block the Next button
-  // This is a PRACTICE portal, so we guide users but always let them proceed
-  var warns = [];
-  var hard = []; // Only truly empty critical fields block
-
-  if(n === 1){
-    var nm = document.getElementById("nm").value.trim();
-    var em = document.getElementById("em").value.trim();
-    var ph = document.getElementById("ph").value.trim();
-    var cy = document.getElementById("cy").value.trim();
-
-    // Name check
-    if(nm.length === 0){
-      hard.push("Full Name cannot be empty");
-    } else {
-      var parts = nm.split(" ");
-      var filled = [];
-      for(var i=0;i<parts.length;i++){ if(parts[i].length>0) filled.push(parts[i]); }
-      if(filled.length < 2) warns.push("Tip: Enter both first and last name (e.g. Vikash Pathak)");
+  function value(id) { return $(id).value.trim(); }
+  function setError(id, message) {
+    const el = $(id + "Error");
+    if (el) el.textContent = message || "";
+  }
+  function validEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
+  function validUrl(v) {
+    if (!v) return true;
+    try { const u = new URL(v); return u.protocol === "https:" || u.protocol === "http:"; }
+    catch (_) { return false; }
+  }
+  function validateStep(step) {
+    let ok = true;
+    const fail = (id, message) => { setError(id, message); if (message) ok = false; };
+    if (step === 0) {
+      fail("fullName", value("fullName") ? "" : "Enter your name.");
+      fail("email", validEmail(value("email")) ? "" : "Enter a valid email address.");
+      const phone = value("phone").replace(/[^\d]/g, "");
+      fail("phone", !value("phone") || (phone.length >= 7 && phone.length <= 15) ? "" : "Enter a valid phone number or leave it blank.");
+      fail("linkedin", validUrl(value("linkedin")) ? "" : "Enter a valid http(s) profile URL or leave it blank.");
+    } else if (step === 1) {
+      fail("targetRole", value("targetRole") ? "" : "Choose a target role.");
+      fail("experience", value("experience") ? "" : "Choose your experience range.");
+      const salary = value("salary");
+      fail("salary", !salary || (Number(salary) >= 0 && Number(salary) <= 1000) ? "" : "Enter a valid CTC or leave it blank.");
+    } else if (step === 2) {
+      fail("skills", skills.size ? "" : "Add at least one relevant skill.");
+      fail("accurate", $("accurate").checked ? "" : "Please confirm the accuracy check to continue.");
     }
-
-    // Email check
-    if(em.length === 0){
-      hard.push("Email Address cannot be empty");
-    } else if(em.indexOf("@") < 0){
-      warns.push("Tip: Email should contain @ symbol");
+    return ok;
+  }
+  function renderStep() {
+    panes.forEach((p, i) => p.classList.toggle("active", i === currentStep));
+    tags.forEach((tag, i) => {
+      tag.classList.toggle("active", i === currentStep);
+      tag.classList.toggle("done", i < currentStep);
+    });
+    $("stepLabel").textContent = `Step ${currentStep + 1} of ${panes.length}`;
+    const percent = Math.round(((currentStep + 1) / panes.length) * 100);
+    $("progressPercent").textContent = `${percent}% complete`;
+    $("progressFill").style.width = percent + "%";
+    $("progressBar").setAttribute("aria-valuenow", String(percent));
+    $("backBtn").classList.toggle("hidden", currentStep === 0);
+    $("nextBtn").classList.toggle("hidden", currentStep === panes.length - 1);
+    $("createBtn").classList.toggle("hidden", currentStep !== panes.length - 1);
+    if (currentStep === 3) renderReview();
+    const heading = panes[currentStep].querySelector("h3");
+    if (heading) heading.setAttribute("tabindex", "-1"), heading.focus({preventScroll:true});
+  }
+  function addSkill(raw) {
+    const s = raw.trim().replace(/\s+/g, " ");
+    if (!s) return;
+    if (skills.size >= 20 && !skills.has(s)) {
+      setError("skills", "You can add up to 20 skills."); return;
     }
-
-    // Phone — just warn, never block
-    if(ph.length === 0){
-      warns.push("Tip: Enter your 10-digit mobile number for recruiter contact");
-    } else {
-      var digits = "";
-      for(var j=0;j<ph.length;j++){
-        var code = ph.charCodeAt(j);
-        if(code >= 48 && code <= 57) digits += ph[j];
-      }
-      if(digits.length !== 10){
-        warns.push("Tip: Mobile number should be 10 digits (you have " + digits.length + ")");
-      }
+    const existing = [...skills].some(x => x.toLowerCase() === s.toLowerCase());
+    if (!existing) skills.add(s);
+    $("skillsInput").value = "";
+    setError("skills", "");
+    renderSkills();
+  }
+  function renderSkills() {
+    const chips = $("skillChips");
+    chips.replaceChildren();
+    skills.forEach(skill => {
+      const chip = document.createElement("span"); chip.className = "chip";
+      const text = document.createElement("span"); text.textContent = skill;
+      const remove = document.createElement("button"); remove.type = "button";
+      remove.textContent = "×"; remove.setAttribute("aria-label", "Remove " + skill);
+      remove.addEventListener("click", () => { skills.delete(skill); renderSkills(); });
+      chip.append(text, remove); chips.append(chip);
+    });
+  }
+  function renderSuggestions() {
+    const box = $("skillSuggestions"); box.replaceChildren();
+    suggestions.forEach(skill => {
+      if ([...skills].some(s => s.toLowerCase() === skill.toLowerCase())) return;
+      const btn = document.createElement("button"); btn.type = "button"; btn.textContent = "+ " + skill;
+      btn.addEventListener("click", () => addSkill(skill)); box.append(btn);
+    });
+  }
+  function escapeText(v) { return v || "Not provided"; }
+  function reviewItem(label, val) {
+    const item = document.createElement("div"); item.className = "review-item";
+    const small = document.createElement("small"); small.textContent = label;
+    const strong = document.createElement("strong"); strong.textContent = escapeText(val);
+    item.append(small, strong); return item;
+  }
+  function collect() {
+    return {
+      name:value("fullName"), email:value("email"), phone:value("phone"), city:value("city"),
+      linkedin:value("linkedin"), role:value("targetRole"), experience:value("experience"),
+      salary:value("salary") ? "₹" + Number(value("salary")).toLocaleString("en-IN") + " LPA" : "",
+      notice:value("notice"), skills:[...skills].join(", "), summary:value("summary"),
+      achievement:value("achievement"), resumeName:value("resumeName")
+    };
+  }
+  function renderReview() {
+    const d = collect(), box = $("reviewContent"); box.replaceChildren();
+    const grid = document.createElement("div"); grid.className = "review-grid";
+    [
+      ["Name",d.name],["Email",d.email],["Phone",d.phone],["City / location",d.city],
+      ["LinkedIn",d.linkedin],["Target role",d.role],["Experience",d.experience],
+      ["Expected CTC",d.salary],["Notice period",d.notice],["Skills",d.skills],
+      ["Professional summary",d.summary],["Achievement / responsibility",d.achievement],
+      ["CV file name (not uploaded)",d.resumeName]
+    ].forEach(([k,v]) => grid.append(reviewItem(k,v)));
+    box.append(grid);
+  }
+  function makeResult() {
+    const d = collect();
+    const completed = [
+      !!d.name, !!d.email, !!d.role, !!d.experience, !!d.skills,
+      !!d.summary, !!d.achievement, !!d.linkedin, !!d.notice
+    ];
+    const score = Math.round(completed.filter(Boolean).length / completed.length * 100);
+    const tips = [];
+    if (!d.summary) tips.push("Add a concise 2–4 sentence professional summary tailored to the target role.");
+    if (!d.achievement) tips.push("Add one specific responsibility or achievement relevant to the target role.");
+    if (skills.size < 3) tips.push("Consider adding two or three more relevant skills you can explain with examples.");
+    if (!d.linkedin) tips.push("If you maintain a professional LinkedIn profile, check that it is current before applying.");
+    if (!d.notice) tips.push("Be ready to state your notice period clearly when an employer asks.");
+    if (tips.length === 0) tips.push("Review your CV against the job description and verify every statement before applying.");
+    const result = $("resultContent"); result.replaceChildren();
+    const scoreBox = document.createElement("div"); scoreBox.className = "score-box";
+    const num = document.createElement("div"); num.className = "score-number"; num.textContent = score + "%";
+    const desc = document.createElement("div");
+    const title = document.createElement("strong"); title.textContent = "Profile completeness";
+    const p = document.createElement("p"); p.textContent = "A checklist of selected profile details—not a measure of your ability, employability, or likelihood of getting hired.";
+    desc.append(title,p); scoreBox.append(num,desc); result.append(scoreBox);
+    const h = document.createElement("h3"); h.textContent = "Suggested next steps"; result.append(h);
+    const ul = document.createElement("ul");
+    tips.forEach(t => { const li = document.createElement("li"); li.textContent = t; ul.append(li); });
+    result.append(ul);
+    const detail = document.createElement("div"); detail.className = "review-grid";
+    [["Name",d.name],["Email",d.email],["Phone",d.phone],["City",d.city],["Target role",d.role],
+     ["Experience",d.experience],["Expected CTC",d.salary],["Notice period",d.notice],
+     ["Skills",d.skills],["Professional summary",d.summary],["Achievement",d.achievement],
+     ["LinkedIn",d.linkedin],["CV file name",d.resumeName]].forEach(([k,v]) => detail.append(reviewItem(k,v)));
+    result.append(detail);
+    summaryText = [
+      "DIGICAREER BY DIGICAFE — JOB APPLICATION PRACTICE SUMMARY",
+      "Generated: " + new Date().toLocaleString(),
+      "Profile completeness: " + score + "%",
+      "Note: This is a practice checklist, not an employability rating or job outcome prediction.",
+      "",
+      ...Object.entries({
+        "Name":d.name,"Email":d.email,"Phone":d.phone,"City / location":d.city,"LinkedIn":d.linkedin,
+        "Target role":d.role,"Experience":d.experience,"Expected CTC":d.salary,"Notice period":d.notice,
+        "Skills":d.skills,"Professional summary":d.summary,"Achievement / responsibility":d.achievement,
+        "CV file name (not uploaded)":d.resumeName
+      }).map(([k,v]) => k + ": " + (v || "Not provided")),
+      "",
+      "Suggested next steps:",
+      ...tips.map((t,i) => `${i+1}. ${t}`),
+      "",
+      "This summary was generated locally by a browser-based practice tool. It was not submitted to an employer."
+    ].join("\n");
+    $("formPanel").querySelector(".progress-wrap").classList.add("hidden");
+    $("formPanel").querySelector(".steps").classList.add("hidden");
+    form.classList.add("hidden");
+    $("resultPanel").classList.add("active");
+    $("resultPanel").scrollIntoView({behavior:"smooth",block:"start"});
+  }
+  $("nextBtn").addEventListener("click", () => {
+    if (!validateStep(currentStep)) {
+      const firstError = panes[currentStep].querySelector(".field-error:not(:empty)");
+      if (firstError) firstError.scrollIntoView({behavior:"smooth",block:"center"});
+      return;
     }
-
-    // City — just warn
-    if(cy.length === 0) warns.push("Tip: Add your current city so recruiters can find you");
-  }
-
-  if(n === 2){
-    var yr = document.getElementById("eyr").value;
-    var sal = document.getElementById("sal").value;
-    if(yr === "") warns.push("Tip: Fill in your years of experience (enter 0 if fresher)");
-    if(!sal) warns.push("Tip: Add your current CTC — portals use this for shortlisting");
-  }
-
-  if(n === 3){
-    var ic = document.querySelectorAll("#igrid input:checked").length;
-    if(ic === 0) warns.push("Tip: Select at least one industry for better job matches");
-  }
-
-  if(n === 4){
-    var rc = document.querySelectorAll("#rlist input:checked").length;
-    if(rc === 0) warns.push("Tip: Select at least one job role");
-    if(skls.length === 0) warns.push("Tip: Add at least one skill — type in the box and press Enter");
-  }
-
-  var eb = document.getElementById("er" + n);
-
-  // Hard blocks only for truly empty critical fields on page 1
-  if(hard.length > 0){
-    var html = "<strong>Please complete these required fields:</strong><br>";
-    for(var h=0;h<hard.length;h++){ html += "&#10060; " + hard[h] + "<br>"; }
-    if(warns.length > 0){
-      html += "<br><strong>Also note:</strong><br>";
-      for(var w=0;w<warns.length;w++){ html += "&#9888; " + warns[w] + "<br>"; }
+    currentStep = Math.min(currentStep + 1, panes.length - 1); renderStep();
+  });
+  $("backBtn").addEventListener("click", () => { currentStep = Math.max(0,currentStep-1); renderStep(); });
+  $("createBtn").addEventListener("click", () => {
+    if (!validateStep(0) || !validateStep(1) || !validateStep(2)) {
+      currentStep = !validateStep(0) ? 0 : (!validateStep(1) ? 1 : 2); renderStep(); return;
     }
-    eb.innerHTML = html;
-    eb.style.display = "block";
-    eb.scrollIntoView({behavior:"smooth", block:"center"});
-    return; // Only block if name or email truly empty
-  }
-
-  // Warnings — show but still proceed
-  if(warns.length > 0){
-    var whtml = "<strong>&#9888; Practice tip — consider fixing before real applications:</strong><br>";
-    for(var wi=0;wi<warns.length;wi++){ whtml += "&#9888; " + warns[wi] + "<br>"; }
-    whtml += "<br><em>You can still proceed for practice purposes.</em>";
-    eb.innerHTML = whtml;
-    eb.style.display = "block";
-    eb.style.background = "#FFFBEB";
-    eb.style.borderColor = "#FDE68A";
-    eb.style.color = "#92400E";
-  } else {
-    eb.style.display = "none";
-  }
-
-  // Always proceed to next step
-  mkDone(n);
-  cur = n + 1;
-  show(cur);
-  updSidebar(cur);
-  if(cur === 6) bRev();
-  window.scrollTo({top:0, behavior:"smooth"});
-}
-
-function prv(n){cur=n-1;show(cur);updSidebar(cur);window.scrollTo({top:0,behavior:"smooth"});}
-
-function show(n){
-  document.querySelectorAll(".pg").forEach(function(p){p.classList.remove("on");});
-  document.getElementById("p"+n).classList.add("on");
-  for(var i=1;i<=6;i++){
-    var d=document.getElementById("d"+i),l=document.getElementById("l"+i),ln=document.getElementById("ln"+i);
-    d.classList.remove("on","dn"); if(l)l.classList.remove("on");
-    if(i<n){d.classList.add("dn");d.innerHTML="&#10003;";if(ln)ln.classList.add("dn");}
-    else if(i===n){d.classList.add("on");d.textContent=i;if(l)l.classList.add("on");}
-    else{d.textContent=i;if(ln)ln.classList.remove("dn");}
-  }
-}
-
-function mkDone(n){var d=document.getElementById("d"+n);d.classList.remove("on");d.classList.add("dn");d.innerHTML="&#10003;";var ln=document.getElementById("ln"+n);if(ln)ln.classList.add("dn");}
-
-function tog(id,show){document.getElementById(id).style.display=show?"block":"none";}
-
-function lvNm(el){
-  var v = el.value.trim();
-  var parts = v.split(" ");
-  var validParts = [];
-  for(var i=0; i<parts.length; i++){ if(parts[i].length > 0) validParts.push(parts[i]); }
-  var ok = validParts.length >= 2 && v.length >= 4;
-  el.className = ok ? "ok" : (v.length > 3 ? "er" : "");
-  tog("enm", !ok && v.length > 3);
-  tog("oknm", ok);
-  updSc();
-}
-function lvEm(el){var v=el.value.trim(),ok=v.length>4&&v.indexOf("@")>0&&v.lastIndexOf(".")>v.indexOf("@");el.className=ok?"ok":(v.length>4?"er":"");tog("eem",!ok&&v.length>4);tog("okem",ok);updSc();}
-function lvPh(el){
-  var raw = el.value;
-  var v = "";
-  for(var i=0; i<raw.length; i++){
-    var c = raw.charCodeAt(i);
-    if(c >= 48 && c <= 57) v += raw[i];
-  }
-  var ok = v.length === 10;
-  el.className = ok ? "ok" : (v.length > 0 ? "er" : "");
-  tog("eph", !ok && v.length > 0);
-  tog("okph", ok);
-  updSc();
-}
-function lvLi(el){var v=el.value.trim();if(!v){el.className="";tog("eli",false);tog("okli",false);return;}var ok=/linkedin\.com\/in\//i.test(v);el.className=ok?"ok":"er";tog("eli",!ok);tog("okli",ok);updSc();}
-
-function onSal(){var v=parseInt(document.getElementById("sal").value)||0;document.getElementById("sald").textContent=v?"= "+lpa(v)+" LPA  (~"+ Math.round(v/12000)/100+" L/month)":"";onExSal();updSc();}
-function onExSal(){var c=parseInt(document.getElementById("sal").value)||0,e=parseInt(document.getElementById("exsal").value)||0;var ed=document.getElementById("exd"),hd=document.getElementById("hkd");if(!e){ed.textContent="";hd.textContent="";return;}ed.textContent="= "+lpa(e)+" LPA";if(c>0){var h=Math.round((e-c)/c*100);hd.textContent=h<20?"Low hike ("+h+"%) - aim for 30%+ when switching":h>80?"Very high ("+h+"%) - may get screened":"Good hike: +"+h+"%";hd.style.color=h<20?"var(--amber)":h>80?"var(--red)":"var(--green)";}}
-function lpa(n){return(n/100000).toFixed(2);}
-
-function iCh(){var c=document.querySelectorAll("#igrid input:checked").length;document.getElementById("icnt").textContent=c===0?"Select at least 1 industry":c<3?c+" selected - add 1-2 more":c>6?c+" selected - consider narrowing down":c+" industries selected";updSc();}
-function rCh(){var c=document.querySelectorAll("#rlist input:checked").length;document.getElementById("rcnt").textContent=c===0?"":c+" roles selected"+(c>=4?" - great!":" - add more for better visibility");updSc();}
-
-function tkKey(e){if(e.key==="Enter"||e.key===","){e.preventDefault();addSk(e.target.value.trim().replace(/,/g,""));e.target.value="";hideSug();}else if(e.key==="Backspace"&&e.target.value===""&&skls.length>0){rmSk(skls[skls.length-1]);}}
-function addSk(s){if(!s||skls.indexOf(s)>=0)return;skls.push(s);renderSk();updSc();}
-function rmSk(s){skls=skls.filter(function(x){return x!==s;});renderSk();updSc();}
-function renderSk(){var a=document.getElementById("tarea"),i=document.getElementById("tinp");a.querySelectorAll(".tag").forEach(function(t){t.remove();});skls.forEach(function(s){var t=document.createElement("div");t.className="tag";t.innerHTML=s+'<button onclick="rmSk(this.parentElement.firstChild.textContent)">&times;</button>';t.firstChild.textContent=s;a.insertBefore(t,i);});var c=skls.length;document.getElementById("skcnt").textContent=c===0?"":c<8?c+" skills - aim for 12+":c<15?c+" skills - good!":c+" skills - excellent!";}
-function tkSug(v){if(!v||v.length<2){hideSug();return;}var m=SKPOOL.filter(function(s){return s.toLowerCase().indexOf(v.toLowerCase())>=0&&skls.indexOf(s)<0;}).slice(0,8);var sg=document.getElementById("sugg");if(!m.length){sg.style.display="none";return;}sg.innerHTML=m.map(function(s){return'<div onmousedown="addSk(''+s.replace(/'/g,"\'")+ '');document.getElementById('tinp').value='';hideSug()">'+s+"</div>";}).join("");sg.style.display="block";}
-function hideSug(){document.getElementById("sugg").style.display="none";}
-
-function updSc(){
-  var nmVal = document.getElementById("nm").value.trim();
-  var nmParts = nmVal.split(" ");
-  var nmValid = [];
-  for(var ni=0; ni<nmParts.length; ni++){ if(nmParts[ni].length>0) nmValid.push(nmParts[ni]); }
-  var nm = nmValid.length >= 2;
-  var em = document.getElementById("em").value.indexOf("@") > 0;
-  var phRaw = document.getElementById("ph").value;
-  var phD = "";
-  for(var pi=0; pi<phRaw.length; pi++){ var c=phRaw.charCodeAt(pi); if(c>=48&&c<=57) phD+=phRaw[pi]; }
-  var ph = phD.length === 10;
-  var db = !!document.getElementById("dob").value;
-  var cy = !!document.getElementById("cy").value.trim();
-  setB(1, Math.round([nm,em,ph,db,cy].filter(Boolean).length / 5 * 100));
-  var yr = document.getElementById("eyr").value !== "";
-  var sl = !!document.getElementById("sal").value;
-  var nt = !!document.getElementById("ntp").value;
-  setB(2, Math.round([yr,sl,nt].filter(Boolean).length / 3 * 100));
-  setB(3, Math.min(100, Math.round(document.querySelectorAll("#igrid input:checked").length / 4 * 100)));
-  setB(4, Math.min(100, Math.round(skls.length / 15 * 100)));
-  var li = !!document.getElementById("li").value.trim();
-  var edu = !!document.getElementById("edu").value;
-  var sm = document.getElementById("summ").value.trim().length > 60;
-  setB(5, Math.round([li,edu,sm].filter(Boolean).length / 3 * 100));
-}
-function setB(n,p){document.getElementById("sc"+n).textContent=p+"%";document.getElementById("sb"+n).style.width=p+"%";}
-
-function updSidebar(n){var t=TIPS[n-1];document.getElementById("tipttl").textContent=t.t;document.getElementById("tipbody").innerHTML=t.b.map(function(x){return'<div class="tipitem"><div class="tipdot"></div>'+x+"</div>";}).join("");document.getElementById("misbody").innerHTML=MIST[n-1].map(function(m){return'<div class="misitem">'+m+"</div>";}).join("");}
-
-function bRev(){var nm=document.getElementById("nm").value||"--",em=document.getElementById("em").value||"--",ph=document.getElementById("ph").value||"--",yr=document.getElementById("eyr").value||"0",mo=document.getElementById("emo").value||"0",sl=document.getElementById("sal").value?lpa(parseInt(document.getElementById("sal").value))+" LPA":"--",nt=document.getElementById("ntp").value||"--",ic=document.querySelectorAll("#igrid input:checked").length,rc=document.querySelectorAll("#rlist input:checked").length;document.getElementById("revbox").innerHTML='<strong style="font-size:14px">Your Profile Summary</strong><div style="display:grid;grid-template-columns:1fr 1fr;gap:5px 18px;margin-top:9px;font-size:13px"><div>Name: <strong>'+nm+'</strong></div><div>Email: <strong>'+em+'</strong></div><div>Phone: <strong>+91 '+ph+'</strong></div><div>Experience: <strong>'+yr+' yrs '+mo+' mo</strong></div><div>Current CTC: <strong>'+sl+'</strong></div><div>Notice: <strong>'+nt+'</strong></div><div>Industries: <strong>'+ic+' selected</strong></div><div>Roles: <strong>'+rc+' selected</strong></div><div>Skills: <strong>'+skls.length+' added</strong></div></div>';}
-
-function chkCon(){if(["c1","c2","c3","c4"].every(function(id){return document.getElementById(id).checked;}))document.getElementById("ercon").style.display="none";}
-
-function doSub(){var m=["c1","c2","c3","c4"].filter(function(id){return!document.getElementById(id).checked;});if(m.length>0){var w=document.getElementById("ercon");w.innerHTML="Please tick all "+m.length+" remaining checkbox"+(m.length>1?"es":"")+" ("+(4-m.length)+"/4 done)";w.style.display="block";w.scrollIntoView({behavior:"smooth",block:"center"});return;}calcSc();}
-
-function calcSc(){
-  var nm=document.getElementById("nm").value.trim(),em=document.getElementById("em").value.trim(),ph=document.getElementById("ph").value.replace(/[^0-9]/g,""),db=document.getElementById("dob").value,cy=document.getElementById("cy").value.trim(),yr=document.getElementById("eyr").value,sl=document.getElementById("sal").value,xs=document.getElementById("exsal").value,nt=document.getElementById("ntp").value,li=document.getElementById("li").value.trim(),edu=document.getElementById("edu").value,sm=document.getElementById("summ").value.trim(),ic=document.querySelectorAll("#igrid input:checked").length,rc=document.querySelectorAll("#rlist input:checked").length,rs=document.getElementById("res").files.length>0;
-  var sc=0,tot=0,fb=[];
-  function chk(ok,pts,g,b){tot+=pts;if(ok){sc+=pts;fb.push({t:g,ok:true});}else{fb.push({t:b,ok:false});}}
-  chk(nm.split(/\s+/).filter(function(x){return x.length>0;}).length>=2,8,"Full name provided correctly","Full name (first + last) is required");
-  chk(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em),8,"Valid email address","Email address is invalid or missing");
-  chk(!/coolboy|hotgirl|funky/i.test(em),4,"Professional email address","Consider a professional email format");
-  chk(ph.length===10,8,"Valid 10-digit phone number","Phone number is invalid or missing");
-  chk(!!db,4,"Date of birth provided","Date of birth not filled");
-  chk(!!cy,5,"Current city mentioned","Current city missing - recruiters filter by location");
-  chk(yr!=="",8,"Experience details filled","Total experience not filled");
-  chk(!!sl,8,"Current CTC provided","Current CTC missing - many portals skip profiles without this");
-  chk(!!xs,5,"Expected CTC provided","Expected CTC not filled");
-  chk(!!nt,5,"Notice period mentioned","Notice period not mentioned");
-  chk(ic>=3,8,ic+" industries selected","Only "+ic+" industry selected - add more for visibility");
-  chk(rc>=4,8,rc+" job roles selected","Only "+rc+" roles selected - add at least 4");
-  chk(skls.length>=8,10,skls.length+" skills added","Only "+skls.length+" skills - add at least 8");
-  chk(skls.length>=15,5,skls.length+" skills - excellent!","Add 15+ skills for maximum visibility");
-  chk(!!li&&/linkedin\.com\/in\//i.test(li),6,"LinkedIn URL provided","LinkedIn URL missing - 87% recruiters check LinkedIn");
-  chk(!!edu,5,"Education qualification filled","Education qualification missing");
-  chk(sm.length>=80,8,"Professional summary written","Summary missing or too short");
-  chk(rs,5,"Resume uploaded","No resume uploaded");
-  var pct=Math.round(sc/tot*100);
-  document.getElementById("p6").classList.remove("on");
-  var dw=document.getElementById("donewrap");dw.classList.add("show");
-  var se=document.getElementById("fscore");se.textContent=pct+"%";se.style.color=pct>=80?"var(--green)":pct>=60?"var(--amber)":"var(--red)";
-  document.getElementById("rf").textContent=[nm,em,ph,db,cy,sl,nt,edu].filter(Boolean).length+"/8";
-  document.getElementById("rs").textContent=skls.length;
-  document.getElementById("ri").textContent=ic;
-  document.getElementById("rr").textContent=rc;
-  document.getElementById("fblist").innerHTML=fb.map(function(f){return'<div class="fbitem '+(f.ok?"ok":"ng")+'">'+(f.ok?"&#10003;":"&#10007;")+" "+f.t+"</div>";}).join("");
-  dw.scrollIntoView({behavior:"smooth"});
-}
-
-function doRestart(){
-  skls=[];cur=1;
-  document.getElementById("donewrap").classList.remove("show");
-  document.querySelectorAll(".pg").forEach(function(p){p.classList.remove("on");});
-  document.getElementById("p1").classList.add("on");
-  document.querySelectorAll("input[type=text],input[type=email],input[type=tel],input[type=number],input[type=url],input[type=date],textarea,select").forEach(function(el){el.value="";el.className=el.className.replace(/\s*(ok|er)/g,"");});
-  document.querySelectorAll("input[type=checkbox],input[type=radio]").forEach(function(el){el.checked=false;});
-  document.getElementById("igrid").innerHTML="";
-  document.getElementById("rlist").innerHTML="";
-  document.getElementById("tarea").querySelectorAll(".tag").forEach(function(t){t.remove();});
-  document.querySelectorAll(".errbox,.ferr,.fok").forEach(function(e){e.style.display="none";});
-  ["sald","exd","hkd","icnt","rcnt","skcnt"].forEach(function(id){var e=document.getElementById(id);if(e)e.textContent="";});
-  document.getElementById("scc").textContent="0 / 600";
-  bInd();bRoles();updSidebar(1);
-  for(var i=1;i<=6;i++){var d=document.getElementById("d"+i),l=document.getElementById("l"+i),ln=document.getElementById("ln"+i);d.className="sdot"+(i===1?" on":"");d.textContent=i;if(l){l.className="slbl"+(i===1?" on":"");}if(ln)ln.className="sline";}
-  for(var j=1;j<=5;j++)setB(j,0);
-  window.scrollTo({top:0,behavior:"smooth"});
-}
-
-function cntCh(el,id,max){var c=el.value.length;document.getElementById(id).textContent=c+" / "+max;if(c>max)el.value=el.value.slice(0,max);}
-
-function tip(el,text){var t=document.getElementById("ttp");t.textContent=text;t.style.display="block";var r=el.getBoundingClientRect();t.style.top=(r.bottom+5+window.scrollY)+"px";t.style.left=Math.max(6,r.left-80)+"px";setTimeout(function(){t.style.display="none";},4000);}
-document.addEventListener("click",function(e){if(!e.target.classList.contains("ico"))document.getElementById("ttp").style.display="none";});
+    makeResult();
+  });
+  $("addSkillBtn").addEventListener("click", () => addSkill(value("skillsInput")));
+  $("skillsInput").addEventListener("keydown", e => {
+    if (e.key === "Enter") { e.preventDefault(); addSkill(value("skillsInput")); }
+  });
+  $("summary").addEventListener("input", () => $("summaryCount").textContent = String($("summary").value.length));
+  $("resetBtn").addEventListener("click", () => {
+    if (!confirm("Clear this practice profile and start over?")) return;
+    form.reset(); skills.clear(); renderSkills(); renderSuggestions();
+    document.querySelectorAll(".field-error").forEach(e => e.textContent = "");
+    $("summaryCount").textContent = "0"; currentStep = 0; renderStep();
+  });
+  $("downloadBtn").addEventListener("click", () => {
+    const blob = new Blob([summaryText], {type:"text/plain;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a"); a.href = url; a.download = "DigiCareer-Practice-Summary.txt";
+    document.body.append(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+  });
+  $("printBtn").addEventListener("click", () => window.print());
+  $("editBtn").addEventListener("click", () => {
+    $("resultPanel").classList.remove("active");
+    $("formPanel").querySelector(".progress-wrap").classList.remove("hidden");
+    $("formPanel").querySelector(".steps").classList.remove("hidden");
+    form.classList.remove("hidden"); currentStep = 3; renderStep();
+    form.scrollIntoView({behavior:"smooth",block:"start"});
+  });
+  $("newBtn").addEventListener("click", () => {
+    if (!confirm("Start a new profile? Your current practice summary will be cleared.")) return;
+    form.reset(); skills.clear(); renderSkills(); renderSuggestions();
+    document.querySelectorAll(".field-error").forEach(e => e.textContent = "");
+    $("summaryCount").textContent = "0"; summaryText = "";
+    $("resultPanel").classList.remove("active");
+    $("formPanel").querySelector(".progress-wrap").classList.remove("hidden");
+    $("formPanel").querySelector(".steps").classList.remove("hidden");
+    form.classList.remove("hidden"); currentStep = 0; renderStep();
+    window.scrollTo({top:0,behavior:"smooth"});
+  });
+  renderSuggestions();
+  renderStep();
+})();
 </script>
 </body>
 </html>
