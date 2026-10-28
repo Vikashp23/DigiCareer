@@ -1,48 +1,56 @@
 # DigiCareer AI Interview Portal
 
-A starter full-stack app for an AI-led interview practice portal. Includes registration/sign-in, password hashing, saved interview history, role selection, one-question-at-a-time interviews, adaptive follow-up questions, feedback, and a downloadable report.
+DigiCareer is a starter full-stack app for registration/sign-in, role-based AI interview practice, answer feedback, and saved interview history.
 
-## What is included
-- `index.html` — browser interface
-- `main.py` — FastAPI backend and API routes
-- `requirements.txt` — Python dependencies
-- `.env.example` — server-side configuration template
+## Important: where the working website lives
 
-## Requirements
-- Python 3.10 or newer
-- An OpenAI API key with API billing enabled. ChatGPT subscriptions and API billing are separate.
-- Internet connection for AI interview requests.
+GitHub Pages only hosts static files and cannot run the Python API. The registration form calls `/api/register`, so it must be opened from the running FastAPI web service, not the GitHub Pages URL.
+
+This repository includes `render.yaml` to make deployment to Render easier. After deployment, open the Render service URL (for example, `https://your-service.onrender.com`) to register and practise. The GitHub Pages address will not register users unless it is separately configured to call a deployed API.
+
+## Deploy on Render
+
+1. Open [Render](https://render.com/) and sign in.
+2. Choose **New → Blueprint** and connect the GitHub repository `Vikashp23/DigiCareer`.
+3. Render reads `render.yaml` and prepares a Python web service. Review the configuration and create/deploy it.
+4. After the service is created, open its **Environment** page and add:
+   - Key: `OPENAI_API_KEY`
+   - Value: your OpenAI API key
+5. Keep `OPENAI_MODEL` set to `gpt-4.1-mini` initially, and verify that this model is available to your API account. Change it to a model your account can access if needed.
+6. Wait for deployment to finish, then open the service's `onrender.com` URL.
+7. Test `https://YOUR-SERVICE.onrender.com/api/health`. It should return JSON with `"ok": true`. After adding the key, `"ai_configured"` should be `true`.
+8. Register an account on the Render service URL. The AI interview itself requires a valid API key and API billing; ChatGPT subscriptions and API billing are separate.
+
+Render's free web services can sleep after inactivity and their local filesystem is not persistent. This starter stores accounts and history in SQLite, so use a persistent disk or a managed database before relying on it for real users. It is a demo, not production-audited.
 
 ## Run locally on Windows
-1. Extract the ZIP to a folder.
-2. Open that folder in Command Prompt or PowerShell.
-3. Create a virtual environment:
+
+1. Install Python 3.10 or newer.
+2. Extract/clone this repository and open PowerShell in the project folder.
+3. Create and activate a virtual environment:
    ```powershell
    py -m venv .venv
-   .venv\Scripts\activate
-   ```
-4. Install packages:
-   ```powershell
+   .venv\\Scripts\\activate
    pip install -r requirements.txt
    ```
-5. Copy `.env.example` to `.env`, then set your API key and preferred model. Never share the key or put it in `index.html`.
-6. The backend loads the `.env` file automatically when it starts. Alternatively, you can set the variables in your terminal:
-   ```powershell
-   $env:OPENAI_API_KEY="your-api-key"
-   $env:OPENAI_MODEL="gpt-6-luna"
-   ```
-7. Start the server:
+4. Copy `.env.example` to `.env` and add your API key. Never commit `.env`.
+5. Start the server:
    ```powershell
    uvicorn main:app --host 127.0.0.1 --port 8000
    ```
-8. Open http://127.0.0.1:8000 in your browser.
+6. Open http://127.0.0.1:8000.
 
-## Notes before public launch
-- This is a starter project, not a production-audited service.
-- AI responses require an API key and may incur usage charges. Confirm model access and pricing in your API account.
-- SQLite is suitable for local testing, not a high-availability public deployment.
-- For production, use HTTPS, secure HttpOnly cookies, rate limiting, email verification, password reset, abuse controls, database backups, retention/deletion controls, privacy terms, and a managed database.
-- Session tokens are bearer tokens stored in browser localStorage for this starter; move to secure HttpOnly cookies before public launch.
-- Do not use real candidate assessments as the sole basis for hiring decisions. Scores are coaching feedback, not validated employment tests.
-- The portal does not record audio or video. Answers are typed.
-- No employer job posting or application submission is connected.
+## Included files
+
+- `index.html` — frontend and registration form
+- `main.py` — FastAPI backend and API endpoints
+- `requirements.txt` — Python dependencies
+- `.env.example` — safe configuration template (no real key)
+- `render.yaml` — Render deployment configuration
+
+## Before public launch
+
+- Use HTTPS, secure HttpOnly cookies, rate limiting, email verification, password reset, abuse controls, database backups, retention/deletion controls, and a privacy notice.
+- Do not commit a real `.env` file or API key.
+- Scores are practice feedback, not validated employment tests. Do not use them as the sole basis for hiring decisions.
+- The portal does not record audio/video or submit real job applications.
