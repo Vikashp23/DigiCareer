@@ -18,7 +18,7 @@ from dotenv import load_dotenv
 BASE_DIR = Path(__file__).resolve().parent
 load_dotenv(BASE_DIR / ".env")
 DB_PATH = Path(os.getenv("DIGICAREER_DB", str(BASE_DIR / "digicareer.db")))
-MODEL = os.getenv("OPENAI_MODEL", "gpt-6-luna")
+MODEL = os.getenv("OPENAI_MODEL", "gpt-4.1-mini")
 API_KEY = os.getenv("OPENAI_API_KEY", "").strip()
 app = FastAPI(title="DigiCareer AI Interview API", version="1.0.0")
 client = OpenAI(api_key=API_KEY) if API_KEY else None
