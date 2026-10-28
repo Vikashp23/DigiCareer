@@ -1,516 +1,84 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="A free, browser-based job application practice tool by DigiCafe. Prepare your profile and review your application before applying.">
-<title>DigiCareer by DigiCafe — Job Application Practice</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DigiCareer AI Interview | DigiCafe</title>
+<meta name="description" content="Practise job interviews with an AI interviewer, receive feedback, and track your interview practice.">
 <style>
-  :root {
-    --navy:#102a43; --blue:#2463eb; --blue-dark:#1949b8; --ink:#172b4d;
-    --muted:#62748a; --line:#dbe4ee; --paper:#ffffff; --bg:#f3f7fb;
-    --soft:#eaf1ff; --green:#16805d; --red:#b42318; --amber:#946200;
-    --shadow:0 12px 32px rgba(16,42,67,.08); --radius:18px;
-  }
-  * { box-sizing:border-box; }
-  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
-  header { background:linear-gradient(125deg,#102a43,#174a7e); color:white; padding:25px 20px 32px; }
-  .header-inner, main, footer { width:min(100% - 32px, 980px); margin:0 auto; }
-  .brand { font-weight:800; letter-spacing:.2px; font-size:1.15rem; }
-  .brand span { color:#9ec5ff; }
-  .hero { padding:23px 0 0; }
-  .hero h1 { margin:0 0 8px; font-size:clamp(1.9rem,5vw,3rem); line-height:1.12; letter-spacing:-.7px; }
-  .hero p { margin:0; color:#d9e8fa; max-width:680px; }
-  main { padding:25px 0 42px; }
-  .notice { border:1px solid #c8d9f5; background:#f0f6ff; border-radius:12px; padding:12px 15px; margin-bottom:18px; color:#23456e; font-size:.92rem; }
-  .panel { background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; }
-  .panel-head { padding:22px 24px 16px; border-bottom:1px solid var(--line); }
-  .panel-head h2 { margin:0 0 4px; font-size:1.25rem; }
-  .panel-head p { margin:0; color:var(--muted); font-size:.93rem; }
-  .progress-wrap { padding:17px 24px 0; }
-  .progress-meta { display:flex; justify-content:space-between; gap:12px; color:var(--muted); font-size:.85rem; margin-bottom:8px; }
-  .progress { height:8px; border-radius:99px; background:#e7edf5; overflow:hidden; }
-  .progress-fill { height:100%; width:25%; background:var(--blue); border-radius:99px; transition:width .2s ease; }
-  .steps { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; padding:15px 24px 0; }
-  .step-tag { color:var(--muted); font-size:.8rem; padding:7px 8px; border-radius:8px; text-align:center; background:#f4f7fa; }
-  .step-tag.active { background:var(--soft); color:var(--blue-dark); font-weight:700; }
-  .step-tag.done { color:var(--green); background:#eaf8f2; }
-  form { padding:22px 24px 24px; }
-  .step-pane { display:none; }
-  .step-pane.active { display:block; }
-  .step-pane h3 { margin:0 0 5px; font-size:1.15rem; }
-  .hint { color:var(--muted); margin:0 0 20px; font-size:.92rem; }
-  .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:17px 18px; }
-  .field { min-width:0; }
-  .field.full { grid-column:1/-1; }
-  label, .label { display:block; font-weight:650; font-size:.92rem; margin-bottom:6px; }
-  .optional { color:var(--muted); font-weight:400; font-size:.82rem; }
-  input, select, textarea { width:100%; padding:11px 12px; border:1px solid #cbd6e2; border-radius:10px; font:inherit; color:var(--ink); background:#fff; }
-  input:focus, select:focus, textarea:focus { outline:3px solid #d9e7ff; border-color:var(--blue); }
-  textarea { min-height:108px; resize:vertical; }
-  .field-error { color:var(--red); min-height:18px; font-size:.82rem; margin-top:4px; }
-  .field-note { color:var(--muted); font-size:.82rem; margin-top:5px; }
-  .chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
-  .chip { display:inline-flex; align-items:center; gap:7px; border:1px solid #cbd8e8; border-radius:999px; padding:6px 10px; background:#f7faff; font-size:.88rem; }
-  .chip button { border:0; background:transparent; color:#52657a; cursor:pointer; font-size:1rem; padding:0 2px; }
-  .suggestions { display:flex; flex-wrap:wrap; gap:7px; margin-top:9px; }
-  .suggestions button { background:#fff; border:1px dashed #aebfd2; color:#36506a; padding:6px 10px; border-radius:999px; cursor:pointer; font:inherit; font-size:.83rem; }
-  .suggestions button:hover { border-color:var(--blue); color:var(--blue-dark); }
-  .checks { display:grid; gap:12px; margin-top:18px; }
-  .check-row { display:flex; align-items:flex-start; gap:10px; font-size:.91rem; color:#34495e; }
-  .check-row input { width:auto; margin-top:5px; }
-  .check-row label { font-weight:400; margin:0; }
-  .check-row strong { font-weight:650; }
-  .actions { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:26px; padding-top:18px; border-top:1px solid var(--line); }
-  .actions-right { display:flex; gap:10px; }
-  button.primary, button.secondary, button.ghost { border-radius:10px; padding:10px 16px; font:inherit; font-weight:700; cursor:pointer; }
-  button.primary { background:var(--blue); color:#fff; border:1px solid var(--blue); }
-  button.primary:hover { background:var(--blue-dark); }
-  button.secondary { background:#fff; color:var(--ink); border:1px solid #cbd6e2; }
-  button.ghost { background:transparent; color:var(--muted); border:1px solid transparent; }
-  button:disabled { opacity:.45; cursor:not-allowed; }
-  .review-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
-  .review-item { background:#f7f9fc; border:1px solid var(--line); border-radius:10px; padding:12px; overflow-wrap:anywhere; }
-  .review-item small { display:block; color:var(--muted); margin-bottom:4px; }
-  .review-item strong { font-weight:650; white-space:pre-wrap; }
-  .score-box { display:flex; align-items:center; gap:16px; background:#eef5ff; border:1px solid #d5e4ff; border-radius:14px; padding:16px; margin-bottom:18px; }
-  .score-number { font-size:2rem; line-height:1; font-weight:800; color:var(--blue-dark); min-width:82px; }
-  .score-box p { margin:3px 0 0; color:#3d5673; font-size:.9rem; }
-  .result { display:none; padding:24px; }
-  .result.active { display:block; }
-  .result h2 { margin:0 0 5px; }
-  .result p { color:var(--muted); }
-  .result-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:20px; }
-  .privacy { color:var(--muted); font-size:.82rem; margin-top:17px; }
-  footer { padding:0 0 28px; color:var(--muted); font-size:.85rem; }
-  .hidden { display:none !important; }
-  @media(max-width:640px) {
-    .grid,.review-grid { grid-template-columns:1fr; }
-    .panel-head,form { padding-left:17px; padding-right:17px; }
-    .progress-wrap,.steps { padding-left:17px; padding-right:17px; }
-    .steps { gap:5px; }
-    .step-tag { font-size:.72rem; padding:7px 3px; }
-    .actions { align-items:stretch; }
-    .actions-right { margin-left:auto; }
-    .score-box { align-items:flex-start; }
-  }
-  @media print {
-    body { background:white; }
-    header { background:white; color:#111; padding:0 0 18px; }
-    .hero p,.brand span { color:#333; }
-    main { width:100%; padding:0; }
-    .notice,.progress-wrap,.steps,form,footer,.result-actions { display:none !important; }
-    .panel { box-shadow:none; border:0; }
-    .result { display:block !important; padding:0; }
-    .score-box { background:#fff; }
-  }
+:root{--navy:#102a43;--blue:#2463eb;--blue2:#1949b8;--ink:#172b4d;--muted:#64748b;--line:#dbe4ee;--bg:#f3f7fb;--white:#fff;--green:#16805d;--red:#b42318;--soft:#eaf1ff;--shadow:0 12px 32px rgba(16,42,67,.08)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}header{background:linear-gradient(125deg,#102a43,#174a7e);color:#fff;padding:20px} .head,main,footer{width:min(100% - 30px,1000px);margin:auto}.head{display:flex;justify-content:space-between;align-items:center;gap:16px}.brand{font-weight:850;font-size:1.12rem}.brand b{color:#a8ccff}.head small{color:#d7e7fa}.hero{padding:28px 0 12px}.hero h1{font-size:clamp(1.9rem,5vw,2.8rem);line-height:1.1;margin:0 0 10px}.hero p{color:#d7e7fa;margin:0;max-width:720px}main{padding:25px 0 40px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:24px;margin-bottom:18px}.hidden{display:none!important}h2{margin:0 0 5px;font-size:1.35rem}h3{margin:0 0 8px}.muted{color:var(--muted)}.small{font-size:.88rem}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.field{min-width:0}.full{grid-column:1/-1}label{display:block;font-weight:700;font-size:.92rem;margin-bottom:6px}input,select,textarea{width:100%;padding:12px;border:1px solid #cbd6e2;border-radius:10px;font:inherit;background:#fff;color:var(--ink)}input:focus,select:focus,textarea:focus{outline:3px solid #d9e7ff;border-color:var(--blue)}textarea{min-height:150px;resize:vertical}.btn{border:1px solid #cbd6e2;border-radius:10px;padding:10px 15px;font:inherit;font-weight:750;cursor:pointer;background:#fff;color:var(--ink)}.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}.btn.primary:hover{background:var(--blue2)}.btn:disabled{opacity:.5;cursor:wait}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.tabs{display:flex;gap:8px;flex-wrap:wrap}.pill{padding:7px 11px;background:#eef4ff;color:#214a83;border-radius:999px;font-size:.83rem;font-weight:700}.alert{padding:12px 14px;border-radius:10px;background:#eff6ff;color:#23456e;border:1px solid #d3e3fc;margin:0 0 16px}.alert.error{background:#fff1f0;color:#9d231b;border-color:#ffd3cf}.alert.ok{background:#ecfdf3;color:#116448;border-color:#b7ebd2}.nav{display:flex;gap:10px;align-items:center}.nav button{font-size:.9rem}.question{font-size:1.2rem;font-weight:750;line-height:1.45;margin:15px 0}.interview-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.bar{height:8px;background:#e8edf4;border-radius:999px;overflow:hidden;margin:12px 0 20px}.bar div{height:100%;background:var(--blue);width:0;transition:width .2s}.bubble{padding:14px;border-radius:12px;background:#f5f8fc;border:1px solid var(--line);margin:12px 0}.bubble.ai{border-left:4px solid var(--blue)}.bubble.user{border-left:4px solid #16a36e}.bubble strong{display:block;font-size:.82rem;color:var(--muted);margin-bottom:4px}.score{font-size:2.3rem;font-weight:850;color:var(--blue2);line-height:1.1}.history-item{border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:10px;display:flex;justify-content:space-between;gap:14px;align-items:center}.feedback-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.feedback-card{background:#f7f9fc;border:1px solid var(--line);border-radius:12px;padding:14px}.feedback-card b{display:block;margin-bottom:5px}.spinner{display:inline-block;width:15px;height:15px;border:2px solid #cbd6e2;border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:7px}@keyframes spin{to{transform:rotate(360deg)}}footer{color:var(--muted);font-size:.85rem;padding-bottom:25px}@media(max-width:640px){.grid,.feedback-grid{grid-template-columns:1fr}.card{padding:18px}.head{align-items:flex-start}.nav{flex-wrap:wrap;justify-content:flex-end}.history-item{align-items:flex-start;flex-direction:column}}
 </style>
 </head>
 <body>
-<header>
-  <div class="header-inner">
-    <div class="brand">Digi<span>Career</span> <span aria-hidden="true">by DigiCafe</span></div>
-    <div class="hero">
-      <h1>Prepare better. Apply confidently.</h1>
-      <p>Practise your job application profile, review the details, and identify areas to improve before applying to an employer.</p>
-    </div>
-  </div>
-</header>
+<header><div class="head"><div class="brand">Digi<b>Career</b> <small>by DigiCafe</small></div><div class="nav"><span id="userLabel" class="small"></span><button id="logoutBtn" class="btn hidden" type="button">Sign out</button></div></div><div class="head hero"><div><h1>Practise with your AI interviewer.</h1><p>Answer one question at a time, receive realistic follow-ups, and get feedback on your technical knowledge, clarity, and structure.</p></div></div></header>
 <main>
-  <div class="notice"><strong>Practice mode:</strong> This page runs in your browser. It does not submit your profile to employers, upload your CV, or use an AI service. Avoid entering sensitive personal information.</div>
-  <section class="panel" id="formPanel" aria-labelledby="formTitle">
-    <div class="panel-head">
-      <h2 id="formTitle">Job application practice</h2>
-      <p>Complete the sections below. Fields marked optional can be left blank.</p>
-    </div>
-    <div class="progress-wrap">
-      <div class="progress-meta"><span id="stepLabel">Step 1 of 4</span><span id="progressPercent">25% complete</span></div>
-      <div class="progress" role="progressbar" aria-label="Form progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25" id="progressBar"><div class="progress-fill" id="progressFill"></div></div>
-    </div>
-    <div class="steps" aria-label="Sections">
-      <div class="step-tag active" data-step-tag="0">1. Profile</div>
-      <div class="step-tag" data-step-tag="1">2. Role</div>
-      <div class="step-tag" data-step-tag="2">3. Experience</div>
-      <div class="step-tag" data-step-tag="3">4. Review</div>
-    </div>
-    <form id="practiceForm" novalidate>
-      <section class="step-pane active" data-step="0">
-        <h3>Basic profile</h3>
-        <p class="hint">Use only the details you would normally include in a job application. Date of birth and full home address are not needed for this practice exercise.</p>
-        <div class="grid">
-          <div class="field">
-            <label for="fullName">Full name *</label>
-            <input id="fullName" name="fullName" autocomplete="name" maxlength="100" required placeholder="e.g. Vikash Pathak">
-            <div class="field-error" id="fullNameError"></div>
-          </div>
-          <div class="field">
-            <label for="email">Email address *</label>
-            <input id="email" name="email" type="email" autocomplete="email" maxlength="160" required placeholder="you@example.com">
-            <div class="field-error" id="emailError"></div>
-          </div>
-          <div class="field">
-            <label for="phone">Phone number <span class="optional">(optional)</span></label>
-            <input id="phone" name="phone" type="tel" autocomplete="tel" maxlength="25" placeholder="+91 98765 43210">
-            <div class="field-note">Add a contact number only if you want it included in your practice summary.</div>
-            <div class="field-error" id="phoneError"></div>
-          </div>
-          <div class="field">
-            <label for="city">City / location <span class="optional">(optional)</span></label>
-            <input id="city" name="city" maxlength="100" placeholder="e.g. Bengaluru">
-          </div>
-          <div class="field full">
-            <label for="linkedin">LinkedIn profile <span class="optional">(optional)</span></label>
-            <input id="linkedin" name="linkedin" type="url" maxlength="250" placeholder="https://www.linkedin.com/in/your-profile">
-            <div class="field-error" id="linkedinError"></div>
-          </div>
-        </div>
-      </section>
-      <section class="step-pane" data-step="1">
-        <h3>Target role</h3>
-        <p class="hint">Choose the kind of role you want to practise applying for.</p>
-        <div class="grid">
-          <div class="field">
-            <label for="targetRole">Target job title *</label>
-            <select id="targetRole" name="targetRole" required>
-              <option value="">Select a role</option>
-              <option>Accounts Executive</option>
-              <option>GST Executive</option>
-              <option>Reconciliation Analyst</option>
-              <option>Accounts Payable (AP) Executive</option>
-              <option>Accounts Receivable (AR) Executive</option>
-              <option>R2R / General Ledger Analyst</option>
-              <option>Finance Executive</option>
-              <option>Other</option>
-            </select>
-            <div class="field-error" id="targetRoleError"></div>
-          </div>
-          <div class="field">
-            <label for="experience">Total experience *</label>
-            <select id="experience" name="experience" required>
-              <option value="">Select experience</option>
-              <option>Fresher</option><option>Less than 1 year</option><option>1–2 years</option>
-              <option>3–5 years</option><option>6–8 years</option><option>9+ years</option>
-            </select>
-            <div class="field-error" id="experienceError"></div>
-          </div>
-          <div class="field">
-            <label for="salary">Expected annual CTC (₹ LPA) <span class="optional">(optional)</span></label>
-            <input id="salary" name="salary" type="number" min="0" max="1000" step="0.1" placeholder="e.g. 6.0">
-            <div class="field-note">Use the figure that fits your role, location, skills and current market conditions.</div>
-            <div class="field-error" id="salaryError"></div>
-          </div>
-          <div class="field">
-            <label for="notice">Notice period <span class="optional">(optional)</span></label>
-            <select id="notice" name="notice">
-              <option value="">Select notice period</option><option>Immediate</option><option>15 days</option>
-              <option>30 days</option><option>45 days</option><option>60 days</option><option>More than 60 days</option>
-            </select>
-          </div>
-        </div>
-      </section>
-      <section class="step-pane" data-step="2">
-        <h3>Skills and experience</h3>
-        <p class="hint">Describe relevant experience honestly. Add skills that you can explain or demonstrate in an interview.</p>
-        <div class="grid">
-          <div class="field full">
-            <label for="skillsInput">Relevant skills *</label>
-            <input id="skillsInput" autocomplete="off" maxlength="60" placeholder="Type a skill and select Add">
-            <div class="suggestions" id="skillSuggestions" aria-label="Suggested skills"></div>
-            <div class="actions" style="border:0;padding:0;margin-top:9px;justify-content:flex-start">
-              <button class="secondary" type="button" id="addSkillBtn">Add skill</button>
-            </div>
-            <div class="chips" id="skillChips" aria-live="polite"></div>
-            <div class="field-error" id="skillsError"></div>
-          </div>
-          <div class="field full">
-            <label for="summary">Professional summary <span class="optional">(optional)</span></label>
-            <textarea id="summary" name="summary" maxlength="900" placeholder="Write 2–4 sentences about your experience, core skills and the value you can bring to the role."></textarea>
-            <div class="field-note"><span id="summaryCount">0</span>/900 characters. Avoid generic claims; use specific duties, tools and results where possible.</div>
-          </div>
-          <div class="field full">
-            <label for="achievement">Relevant achievement or responsibility <span class="optional">(optional)</span></label>
-            <textarea id="achievement" name="achievement" maxlength="700" placeholder="Example: Reconciled bank and payment gateway transactions, investigated unmatched entries, and prepared supporting reports."></textarea>
-          </div>
-          <div class="field full">
-            <label for="resumeName">CV file name <span class="optional">(optional, text only)</span></label>
-            <input id="resumeName" name="resumeName" maxlength="180" placeholder="e.g. Vikash_Pathak_Accounts_Resume.pdf">
-            <div class="field-note">This tool does not upload or attach a CV. Use this field only as a reminder of the file you plan to submit.</div>
-          </div>
-        </div>
-        <div class="checks">
-          <div class="check-row">
-            <input id="accurate" type="checkbox">
-            <label for="accurate"><strong>Accuracy check:</strong> I will verify that the details in my actual application are accurate and supportable.</label>
-          </div>
-        </div>
-        <div class="field-error" id="accurateError"></div>
-      </section>
-      <section class="step-pane" data-step="3">
-        <h3>Review your practice profile</h3>
-        <p class="hint">Check for missing or unclear details before creating your local summary.</p>
-        <div id="reviewContent"></div>
-      </section>
-      <div class="actions" id="formActions">
-        <button type="button" class="ghost" id="resetBtn">Start over</button>
-        <div class="actions-right">
-          <button type="button" class="secondary hidden" id="backBtn">Back</button>
-          <button type="button" class="primary" id="nextBtn">Continue</button>
-          <button type="button" class="primary hidden" id="createBtn">Create practice summary</button>
-        </div>
-      </div>
-    </form>
-    <section class="result" id="resultPanel" aria-live="polite">
-      <h2>Your practice summary</h2>
-      <p>This summary is generated locally in your browser. It is not an employability rating and does not predict interview or job outcomes.</p>
-      <div id="resultContent"></div>
-      <div class="result-actions">
-        <button class="primary" type="button" id="downloadBtn">Download summary (.txt)</button>
-        <button class="secondary" type="button" id="printBtn">Print / Save as PDF</button>
-        <button class="secondary" type="button" id="editBtn">Edit answers</button>
-        <button class="ghost" type="button" id="newBtn">Start a new profile</button>
-      </div>
-      <p class="privacy">Privacy note: no server submission or cloud storage is implemented in this demo. Your entries remain in this page while it is open; refreshing or closing the page may clear them.</p>
-    </section>
-  </section>
+<div id="globalMessage" class="alert hidden" role="status"></div>
+<section id="authView" class="card">
+  <div class="tabs"><button id="loginTab" class="btn primary" type="button">Sign in</button><button id="registerTab" class="btn" type="button">Create account</button></div>
+  <div style="margin-top:18px"><h2 id="authTitle">Welcome back</h2><p class="muted small">Create an account to save your interview practice history on this server.</p></div>
+  <form id="authForm"><div class="grid">
+    <div id="nameWrap" class="field full hidden"><label for="name">Full name</label><input id="name" maxlength="100" autocomplete="name" placeholder="Your name"></div>
+    <div class="field full"><label for="authEmail">Email address</label><input id="authEmail" type="email" required maxlength="254" autocomplete="email" placeholder="you@example.com"></div>
+    <div class="field full"><label for="authPassword">Password</label><input id="authPassword" type="password" required minlength="10" maxlength="128" autocomplete="current-password" placeholder="At least 10 characters"></div>
+  </div><div class="actions"><button id="authSubmit" class="btn primary" type="submit">Sign in</button></div></form>
+  <p class="small muted">Use a unique password. Do not use a password you use for banking or other important accounts.</p>
+</section>
+<section id="dashboardView" class="hidden">
+  <div class="card"><h2>Start a practice interview</h2><p class="muted">Choose a role, interview type and length. The AI interviewer will ask one question at a time and adapt follow-ups to your answers.</p>
+  <form id="startForm"><div class="grid">
+    <div class="field"><label for="role">Target role</label><select id="role" required><option>Accounts Executive</option><option>GST Executive</option><option>Bank Reconciliation Analyst</option><option>Accounts Payable (AP)</option><option>Accounts Receivable (AR)</option><option>R2R / General Ledger Analyst</option><option>Finance Executive</option><option>Customer Support</option><option>Sales Executive</option><option>Software Developer</option><option>HR Executive</option><option>General HR Interview</option><option>Custom role</option></select></div>
+    <div id="customRoleWrap" class="field hidden"><label for="customRole">Custom job title</label><input id="customRole" maxlength="100" placeholder="Enter job title"></div>
+    <div class="field"><label for="interviewType">Interview type</label><select id="interviewType"><option value="mixed">Mixed: technical + HR</option><option value="technical">Technical / role-specific</option><option value="hr">HR / behavioural</option><option value="communication">Communication and clarity</option></select></div>
+    <div class="field"><label for="level">Experience level</label><select id="level"><option>Fresher</option><option>1–2 years</option><option>3–5 years</option><option>6–8 years</option><option>9+ years</option></select></div>
+    <div class="field"><label for="count">Number of questions</label><select id="count"><option value="5">5 questions · short practice</option><option value="8" selected>8 questions · standard</option><option value="12">12 questions · extended</option></select></div>
+    <div class="field"><label for="language">Answer language</label><select id="language"><option>English</option><option>Simple English</option><option>Hindi</option><option>Kannada</option></select></div>
+  </div><div class="actions"><button class="btn primary" id="startBtn" type="submit">Start AI interview</button></div></form>
+  <p class="small muted">AI feedback is practice guidance, not a hiring decision. Do not enter confidential employer, customer, or financial information.</p></div>
+  <div class="card"><h2>Previous practice sessions</h2><p class="muted small">Your saved interview results appear here.</p><div id="historyList"><p class="muted">Loading history…</p></div></div>
+</section>
+<section id="interviewView" class="card hidden">
+  <div class="interview-top"><div><span id="rolePill" class="pill"></span><span id="typePill" class="pill"></span></div><div id="questionCount" class="small muted">Question 1</div></div>
+  <div class="bar"><div id="interviewProgress"></div></div>
+  <div id="transcript" aria-live="polite"></div>
+  <div id="currentQuestion" class="question"></div>
+  <form id="answerForm"><label for="answer">Your answer</label><textarea id="answer" maxlength="6000" required placeholder="Answer as you would in a real interview. Explain your reasoning and give an example when relevant."></textarea><p class="small muted">Tip: structure your answer clearly. For experience-based questions, explain the situation, your action, and the result.</p><div class="actions"><button id="submitAnswer" class="btn primary" type="submit">Submit answer</button><button id="endEarlyBtn" class="btn" type="button">Finish interview early</button></div></form>
+</section>
+<section id="resultView" class="card hidden"><h2>Interview feedback</h2><p id="resultSubtitle" class="muted"></p><div id="resultBody"></div><div class="actions"><button id="newInterviewBtn" class="btn primary" type="button">Practise again</button><button id="dashboardBtn" class="btn" type="button">Back to dashboard</button></div></section>
 </main>
-<footer>© <span id="year"></span> DigiCareer by DigiCafe · Job application practice tool</footer>
+<footer>DigiCareer by DigiCafe · AI-assisted interview practice · <span id="year"></span></footer>
 <script>
 (() => {
-  "use strict";
-  const $ = (id) => document.getElementById(id);
-  const panes = Array.from(document.querySelectorAll(".step-pane"));
-  const tags = Array.from(document.querySelectorAll("[data-step-tag]"));
-  const form = $("practiceForm");
-  const suggestions = [
-    "Bank Reconciliation","Payment Gateway Reconciliation","GST Reconciliation","TDS",
-    "Accounts Payable","Accounts Receivable","General Ledger","Journal Entries",
-    "Tally Prime","Advanced Excel","Pivot Tables","VLOOKUP / XLOOKUP","MIS Reporting",
-    "Invoice Processing","Vendor Payments","Month-end Closing","Financial Reporting"
-  ];
-  const skills = new Set();
-  let currentStep = 0;
-  let summaryText = "";
-
-  $("year").textContent = new Date().getFullYear();
-
-  function value(id) { return $(id).value.trim(); }
-  function setError(id, message) {
-    const el = $(id + "Error");
-    if (el) el.textContent = message || "";
-  }
-  function validEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
-  function validUrl(v) {
-    if (!v) return true;
-    try { const u = new URL(v); return u.protocol === "https:" || u.protocol === "http:"; }
-    catch (_) { return false; }
-  }
-  function validateStep(step) {
-    let ok = true;
-    const fail = (id, message) => { setError(id, message); if (message) ok = false; };
-    if (step === 0) {
-      fail("fullName", value("fullName") ? "" : "Enter your name.");
-      fail("email", validEmail(value("email")) ? "" : "Enter a valid email address.");
-      const phone = value("phone").replace(/[^\d]/g, "");
-      fail("phone", !value("phone") || (phone.length >= 7 && phone.length <= 15) ? "" : "Enter a valid phone number or leave it blank.");
-      fail("linkedin", validUrl(value("linkedin")) ? "" : "Enter a valid http(s) profile URL or leave it blank.");
-    } else if (step === 1) {
-      fail("targetRole", value("targetRole") ? "" : "Choose a target role.");
-      fail("experience", value("experience") ? "" : "Choose your experience range.");
-      const salary = value("salary");
-      fail("salary", !salary || (Number(salary) >= 0 && Number(salary) <= 1000) ? "" : "Enter a valid CTC or leave it blank.");
-    } else if (step === 2) {
-      fail("skills", skills.size ? "" : "Add at least one relevant skill.");
-      fail("accurate", $("accurate").checked ? "" : "Please confirm the accuracy check to continue.");
-    }
-    return ok;
-  }
-  function renderStep() {
-    panes.forEach((p, i) => p.classList.toggle("active", i === currentStep));
-    tags.forEach((tag, i) => {
-      tag.classList.toggle("active", i === currentStep);
-      tag.classList.toggle("done", i < currentStep);
-    });
-    $("stepLabel").textContent = `Step ${currentStep + 1} of ${panes.length}`;
-    const percent = Math.round(((currentStep + 1) / panes.length) * 100);
-    $("progressPercent").textContent = `${percent}% complete`;
-    $("progressFill").style.width = percent + "%";
-    $("progressBar").setAttribute("aria-valuenow", String(percent));
-    $("backBtn").classList.toggle("hidden", currentStep === 0);
-    $("nextBtn").classList.toggle("hidden", currentStep === panes.length - 1);
-    $("createBtn").classList.toggle("hidden", currentStep !== panes.length - 1);
-    if (currentStep === 3) renderReview();
-    const heading = panes[currentStep].querySelector("h3");
-    if (heading) heading.setAttribute("tabindex", "-1"), heading.focus({preventScroll:true});
-  }
-  function addSkill(raw) {
-    const s = raw.trim().replace(/\s+/g, " ");
-    if (!s) return;
-    if (skills.size >= 20 && !skills.has(s)) {
-      setError("skills", "You can add up to 20 skills."); return;
-    }
-    const existing = [...skills].some(x => x.toLowerCase() === s.toLowerCase());
-    if (!existing) skills.add(s);
-    $("skillsInput").value = "";
-    setError("skills", "");
-    renderSkills();
-  }
-  function renderSkills() {
-    const chips = $("skillChips");
-    chips.replaceChildren();
-    skills.forEach(skill => {
-      const chip = document.createElement("span"); chip.className = "chip";
-      const text = document.createElement("span"); text.textContent = skill;
-      const remove = document.createElement("button"); remove.type = "button";
-      remove.textContent = "×"; remove.setAttribute("aria-label", "Remove " + skill);
-      remove.addEventListener("click", () => { skills.delete(skill); renderSkills(); });
-      chip.append(text, remove); chips.append(chip);
-    });
-  }
-  function renderSuggestions() {
-    const box = $("skillSuggestions"); box.replaceChildren();
-    suggestions.forEach(skill => {
-      if ([...skills].some(s => s.toLowerCase() === skill.toLowerCase())) return;
-      const btn = document.createElement("button"); btn.type = "button"; btn.textContent = "+ " + skill;
-      btn.addEventListener("click", () => addSkill(skill)); box.append(btn);
-    });
-  }
-  function escapeText(v) { return v || "Not provided"; }
-  function reviewItem(label, val) {
-    const item = document.createElement("div"); item.className = "review-item";
-    const small = document.createElement("small"); small.textContent = label;
-    const strong = document.createElement("strong"); strong.textContent = escapeText(val);
-    item.append(small, strong); return item;
-  }
-  function collect() {
-    return {
-      name:value("fullName"), email:value("email"), phone:value("phone"), city:value("city"),
-      linkedin:value("linkedin"), role:value("targetRole"), experience:value("experience"),
-      salary:value("salary") ? "₹" + Number(value("salary")).toLocaleString("en-IN") + " LPA" : "",
-      notice:value("notice"), skills:[...skills].join(", "), summary:value("summary"),
-      achievement:value("achievement"), resumeName:value("resumeName")
-    };
-  }
-  function renderReview() {
-    const d = collect(), box = $("reviewContent"); box.replaceChildren();
-    const grid = document.createElement("div"); grid.className = "review-grid";
-    [
-      ["Name",d.name],["Email",d.email],["Phone",d.phone],["City / location",d.city],
-      ["LinkedIn",d.linkedin],["Target role",d.role],["Experience",d.experience],
-      ["Expected CTC",d.salary],["Notice period",d.notice],["Skills",d.skills],
-      ["Professional summary",d.summary],["Achievement / responsibility",d.achievement],
-      ["CV file name (not uploaded)",d.resumeName]
-    ].forEach(([k,v]) => grid.append(reviewItem(k,v)));
-    box.append(grid);
-  }
-  function makeResult() {
-    const d = collect();
-    const completed = [
-      !!d.name, !!d.email, !!d.role, !!d.experience, !!d.skills,
-      !!d.summary, !!d.achievement, !!d.linkedin, !!d.notice
-    ];
-    const score = Math.round(completed.filter(Boolean).length / completed.length * 100);
-    const tips = [];
-    if (!d.summary) tips.push("Add a concise 2–4 sentence professional summary tailored to the target role.");
-    if (!d.achievement) tips.push("Add one specific responsibility or achievement relevant to the target role.");
-    if (skills.size < 3) tips.push("Consider adding two or three more relevant skills you can explain with examples.");
-    if (!d.linkedin) tips.push("If you maintain a professional LinkedIn profile, check that it is current before applying.");
-    if (!d.notice) tips.push("Be ready to state your notice period clearly when an employer asks.");
-    if (tips.length === 0) tips.push("Review your CV against the job description and verify every statement before applying.");
-    const result = $("resultContent"); result.replaceChildren();
-    const scoreBox = document.createElement("div"); scoreBox.className = "score-box";
-    const num = document.createElement("div"); num.className = "score-number"; num.textContent = score + "%";
-    const desc = document.createElement("div");
-    const title = document.createElement("strong"); title.textContent = "Profile completeness";
-    const p = document.createElement("p"); p.textContent = "A checklist of selected profile details—not a measure of your ability, employability, or likelihood of getting hired.";
-    desc.append(title,p); scoreBox.append(num,desc); result.append(scoreBox);
-    const h = document.createElement("h3"); h.textContent = "Suggested next steps"; result.append(h);
-    const ul = document.createElement("ul");
-    tips.forEach(t => { const li = document.createElement("li"); li.textContent = t; ul.append(li); });
-    result.append(ul);
-    const detail = document.createElement("div"); detail.className = "review-grid";
-    [["Name",d.name],["Email",d.email],["Phone",d.phone],["City",d.city],["Target role",d.role],
-     ["Experience",d.experience],["Expected CTC",d.salary],["Notice period",d.notice],
-     ["Skills",d.skills],["Professional summary",d.summary],["Achievement",d.achievement],
-     ["LinkedIn",d.linkedin],["CV file name",d.resumeName]].forEach(([k,v]) => detail.append(reviewItem(k,v)));
-    result.append(detail);
-    summaryText = [
-      "DIGICAREER BY DIGICAFE — JOB APPLICATION PRACTICE SUMMARY",
-      "Generated: " + new Date().toLocaleString(),
-      "Profile completeness: " + score + "%",
-      "Note: This is a practice checklist, not an employability rating or job outcome prediction.",
-      "",
-      ...Object.entries({
-        "Name":d.name,"Email":d.email,"Phone":d.phone,"City / location":d.city,"LinkedIn":d.linkedin,
-        "Target role":d.role,"Experience":d.experience,"Expected CTC":d.salary,"Notice period":d.notice,
-        "Skills":d.skills,"Professional summary":d.summary,"Achievement / responsibility":d.achievement,
-        "CV file name (not uploaded)":d.resumeName
-      }).map(([k,v]) => k + ": " + (v || "Not provided")),
-      "",
-      "Suggested next steps:",
-      ...tips.map((t,i) => `${i+1}. ${t}`),
-      "",
-      "This summary was generated locally by a browser-based practice tool. It was not submitted to an employer."
-    ].join("\n");
-    $("formPanel").querySelector(".progress-wrap").classList.add("hidden");
-    $("formPanel").querySelector(".steps").classList.add("hidden");
-    form.classList.add("hidden");
-    $("resultPanel").classList.add("active");
-    $("resultPanel").scrollIntoView({behavior:"smooth",block:"start"});
-  }
-  $("nextBtn").addEventListener("click", () => {
-    if (!validateStep(currentStep)) {
-      const firstError = panes[currentStep].querySelector(".field-error:not(:empty)");
-      if (firstError) firstError.scrollIntoView({behavior:"smooth",block:"center"});
-      return;
-    }
-    currentStep = Math.min(currentStep + 1, panes.length - 1); renderStep();
-  });
-  $("backBtn").addEventListener("click", () => { currentStep = Math.max(0,currentStep-1); renderStep(); });
-  $("createBtn").addEventListener("click", () => {
-    if (!validateStep(0) || !validateStep(1) || !validateStep(2)) {
-      currentStep = !validateStep(0) ? 0 : (!validateStep(1) ? 1 : 2); renderStep(); return;
-    }
-    makeResult();
-  });
-  $("addSkillBtn").addEventListener("click", () => addSkill(value("skillsInput")));
-  $("skillsInput").addEventListener("keydown", e => {
-    if (e.key === "Enter") { e.preventDefault(); addSkill(value("skillsInput")); }
-  });
-  $("summary").addEventListener("input", () => $("summaryCount").textContent = String($("summary").value.length));
-  $("resetBtn").addEventListener("click", () => {
-    if (!confirm("Clear this practice profile and start over?")) return;
-    form.reset(); skills.clear(); renderSkills(); renderSuggestions();
-    document.querySelectorAll(".field-error").forEach(e => e.textContent = "");
-    $("summaryCount").textContent = "0"; currentStep = 0; renderStep();
-  });
-  $("downloadBtn").addEventListener("click", () => {
-    const blob = new Blob([summaryText], {type:"text/plain;charset=utf-8"});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a"); a.href = url; a.download = "DigiCareer-Practice-Summary.txt";
-    document.body.append(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-  });
-  $("printBtn").addEventListener("click", () => window.print());
-  $("editBtn").addEventListener("click", () => {
-    $("resultPanel").classList.remove("active");
-    $("formPanel").querySelector(".progress-wrap").classList.remove("hidden");
-    $("formPanel").querySelector(".steps").classList.remove("hidden");
-    form.classList.remove("hidden"); currentStep = 3; renderStep();
-    form.scrollIntoView({behavior:"smooth",block:"start"});
-  });
-  $("newBtn").addEventListener("click", () => {
-    if (!confirm("Start a new profile? Your current practice summary will be cleared.")) return;
-    form.reset(); skills.clear(); renderSkills(); renderSuggestions();
-    document.querySelectorAll(".field-error").forEach(e => e.textContent = "");
-    $("summaryCount").textContent = "0"; summaryText = "";
-    $("resultPanel").classList.remove("active");
-    $("formPanel").querySelector(".progress-wrap").classList.remove("hidden");
-    $("formPanel").querySelector(".steps").classList.remove("hidden");
-    form.classList.remove("hidden"); currentStep = 0; renderStep();
-    window.scrollTo({top:0,behavior:"smooth"});
-  });
-  renderSuggestions();
-  renderStep();
+"use strict";
+const $ = id => document.getElementById(id);
+const state = {token:localStorage.getItem("digicareer_token")||"", user:null, authMode:"login", interview:null, busy:false};
+const views = ["authView","dashboardView","interviewView","resultView"];
+$("year").textContent = new Date().getFullYear();
+function message(text, kind="") { const el=$("globalMessage"); el.textContent=text; el.className="alert"+(kind?" "+kind:""); el.classList.toggle("hidden",!text); }
+function showView(id) { views.forEach(v=>$(v).classList.toggle("hidden",v!==id)); message(""); window.scrollTo({top:0,behavior:"smooth"}); }
+function setBusy(btn,busy,label) { btn.disabled=busy; if(busy){btn.dataset.old=btn.textContent;btn.innerHTML='<span class="spinner"></span>'+label;}else{btn.textContent=btn.dataset.old||label;} }
+async function api(path, options={}) {
+  const headers={"Content-Type":"application/json",...(options.headers||{})};
+  if(state.token) headers.Authorization="Bearer "+state.token;
+  const response=await fetch(path,{...options,headers});
+  const data=await response.json().catch(()=>({detail:"Unexpected server response"}));
+  if(!response.ok) throw new Error(data.detail||data.error||"Request failed. Please try again.");
+  return data;
+}
+function authMode(mode){state.authMode=mode;const reg=mode==="register";$("nameWrap").classList.toggle("hidden",!reg);$("name").required=reg;$("authTitle").textContent=reg?"Create your DigiCareer account":"Welcome back";$("authSubmit").textContent=reg?"Create account":"Sign in";$("loginTab").classList.toggle("primary",!reg);$("registerTab").classList.toggle("primary",reg);$("authPassword").autocomplete=reg?"new-password":"current-password";}
+$("loginTab").addEventListener("click",()=>authMode("login"));$("registerTab").addEventListener("click",()=>authMode("register"));
+$("authForm").addEventListener("submit",async e=>{e.preventDefault();const btn=$("authSubmit");setBusy(btn,true,state.authMode==="register"?"Creating account…":"Signing in…");try{const data=await api(state.authMode==="register"?"/api/register":"/api/login",{method:"POST",body:JSON.stringify({name:$("name").value.trim(),email:$("authEmail").value.trim(),password:$("authPassword").value})});state.token=data.token;state.user=data.user;localStorage.setItem("digicareer_token",state.token);$("authPassword").value="";await enterDashboard();}catch(err){message(err.message,"error");}finally{setBusy(btn,false,"Sign in");btn.textContent=state.authMode==="register"?"Create account":"Sign in";}});
+async function enterDashboard(){ $("userLabel").textContent=state.user?.name||state.user?.email||"";$("logoutBtn").classList.remove("hidden");showView("dashboardView");await loadHistory();}
+async function loadHistory(){const el=$("historyList");el.textContent="Loading history…";try{const data=await api("/api/history");el.replaceChildren();if(!data.interviews.length){const p=document.createElement("p");p.className="muted";p.textContent="No interviews yet. Start your first practice session above.";el.append(p);return;}data.interviews.forEach(item=>{const row=document.createElement("div");row.className="history-item";const info=document.createElement("div");const title=document.createElement("strong");title.textContent=item.role;const meta=document.createElement("div");meta.className="small muted";meta.textContent=`${item.interview_type} · ${item.question_count} questions · ${new Date(item.created_at+"Z").toLocaleString()}`;info.append(title,meta);const score=document.createElement("span");score.className="pill";score.textContent=item.score==null?"In progress":`${item.score}/100`;row.append(info,score);el.append(row);});}catch(err){el.textContent=err.message;}}
+$("role").addEventListener("change",()=> $("customRoleWrap").classList.toggle("hidden",$("role").value!=="Custom role"));
+$("startForm").addEventListener("submit",async e=>{e.preventDefault();const btn=$("startBtn");const role=$("role").value==="Custom role"?$("customRole").value.trim():$("role").value;if(!role){message("Enter a custom job title.","error");return;}setBusy(btn,true,"Preparing interview…");try{state.interview=await api("/api/interviews",{method:"POST",body:JSON.stringify({role,interview_type:$("interviewType").value,level:$("level").value,question_count:Number($("count").value),language:$("language").value})});renderInterview();showView("interviewView");}catch(err){message(err.message,"error");}finally{setBusy(btn,false,"Start AI interview");}});
+function safeBubble(who,text,cls){const b=document.createElement("div");b.className="bubble "+cls;const s=document.createElement("strong");s.textContent=who;const p=document.createElement("div");p.textContent=text;b.append(s,p);return b;}
+function renderInterview(){const i=state.interview;$("rolePill").textContent=i.role;$("typePill").textContent=i.interview_type;$("questionCount").textContent=`Question ${i.answers.length+1} of ${i.question_count}`;$("interviewProgress").style.width=(i.answers.length/i.question_count*100)+"%";const tr=$("transcript");tr.replaceChildren();(i.answers||[]).forEach((a,n)=>{tr.append(safeBubble("AI interviewer · Question "+(n+1),a.question,"ai"));tr.append(safeBubble("Your answer",a.answer,"user"));if(a.feedback)tr.append(safeBubble("Interviewer feedback",a.feedback,"ai"));});$("currentQuestion").textContent=i.current_question||"Interview complete";$("answer").value="";$("answer").focus();}
+$("answerForm").addEventListener("submit",async e=>{e.preventDefault();const answer=$("answer").value.trim();if(!answer){message("Write an answer before submitting.","error");return;}const btn=$("submitAnswer");setBusy(btn,true,"Evaluating answer…");$("endEarlyBtn").disabled=true;try{const result=await api(`/api/interviews/${state.interview.id}/answer`,{method:"POST",body:JSON.stringify({answer})});state.interview=result.interview;if(result.finished){renderResult(result.report);showView("resultView");}else{renderInterview();} }catch(err){message(err.message,"error");}finally{setBusy(btn,false,"Submit answer");$("endEarlyBtn").disabled=false;}});
+$("endEarlyBtn").addEventListener("click",async()=>{if(!confirm("Finish this interview now and receive feedback on completed answers?"))return;const btn=$("endEarlyBtn");setBusy(btn,true,"Finishing…");try{const data=await api(`/api/interviews/${state.interview.id}/finish`,{method:"POST",body:"{}"});state.interview=data.interview;renderResult(data.report);showView("resultView");}catch(err){message(err.message,"error");}finally{setBusy(btn,false,"Finish interview early");}});
+function renderResult(report){const body=$("resultBody");body.replaceChildren();$("resultSubtitle").textContent=`${report.role} · ${report.answers_reviewed} answer(s) reviewed`;const score=document.createElement("div");score.className="score";score.textContent=report.overall_score+"/100";body.append(score);const desc=document.createElement("p");desc.className="muted";desc.textContent="Practice feedback only—not a hiring decision or guarantee of employment.";body.append(desc);const grid=document.createElement("div");grid.className="feedback-grid";for(const [label,val] of [["Technical knowledge",report.technical_knowledge],["Answer clarity",report.answer_clarity],["Structure",report.structure],["Role relevance",report.role_relevance]]){const c=document.createElement("div");c.className="feedback-card";const b=document.createElement("b");b.textContent=label;const p=document.createElement("div");p.textContent=val??"Not enough evidence";c.append(b,p);grid.append(c);}body.append(grid);for(const [title,items] of [["Strengths",report.strengths],["Areas to improve",report.improvements],["Recommended practice",report.next_steps]]){const h=document.createElement("h3");h.style.marginTop="20px";h.textContent=title;body.append(h);const ul=document.createElement("ul");(items||[]).forEach(t=>{const li=document.createElement("li");li.textContent=t;ul.append(li);});if(!ul.children.length){const li=document.createElement("li");li.textContent="Keep practising and review the feedback above.";ul.append(li);}body.append(ul);}const transcript=document.createElement("details");transcript.style.marginTop="20px";const sum=document.createElement("summary");sum.textContent="View question-by-question feedback";transcript.append(sum);(report.answer_feedback||[]).forEach((a,n)=>transcript.append(safeBubble("Question "+(n+1),a.question,"ai"),safeBubble("Feedback",a.feedback,"user")));body.append(transcript);const dl=document.createElement("button");dl.className="btn";dl.textContent="Download feedback (.txt)";dl.type="button";dl.addEventListener("click",()=>{const text=`DigiCareer AI Interview Feedback\nRole: ${report.role}\nOverall practice score: ${report.overall_score}/100\n\nStrengths:\n${(report.strengths||[]).map(x=>"- "+x).join("\n")}\n\nAreas to improve:\n${(report.improvements||[]).map(x=>"- "+x).join("\n")}\n\nNext steps:\n${(report.next_steps||[]).map(x=>"- "+x).join("\n")}\n\nQuestion feedback:\n${(report.answer_feedback||[]).map((a,i)=>`${i+1}. ${a.question}\n${a.feedback}`).join("\n\n")}\n\nAI practice feedback only; not a hiring decision.`;const url=URL.createObjectURL(new Blob([text],{type:"text/plain;charset=utf-8"}));const a=document.createElement("a");a.href=url;a.download="DigiCareer-Interview-Feedback.txt";a.click();URL.revokeObjectURL(url);});body.append(dl);}
+$("newInterviewBtn").addEventListener("click",async()=>{showView("dashboardView");await loadHistory();});$("dashboardBtn").addEventListener("click",async()=>{showView("dashboardView");await loadHistory();});
+$("logoutBtn").addEventListener("click",()=>{state.token="";state.user=null;state.interview=null;localStorage.removeItem("digicareer_token");$("userLabel").textContent="";$("logoutBtn").classList.add("hidden");showView("authView");});
+(async()=>{if(!state.token){showView("authView");return;}try{const data=await api("/api/me");state.user=data.user;await enterDashboard();}catch(_){state.token="";localStorage.removeItem("digicareer_token");showView("authView");}})();
 })();
 </script>
-</body>
-</html>
+</body></html>
