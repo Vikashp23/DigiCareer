@@ -12,16 +12,23 @@ from fastapi import FastAPI, Header, HTTPException, Depends
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, EmailStr, Field
-from openai import OpenAI
+from google import genai
+from google.genai import types
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent
 load_dotenv(BASE_DIR / ".env")
 DB_PATH = Path(os.getenv("DIGICAREER_DB", str(BASE_DIR / "digicareer.db")))
-MODEL = os.getenv("OPENAI_MODEL", "gpt-4.1-mini")
-API_KEY = os.getenv("OPENAI_API_KEY", "").strip()
-app = FastAPI(title="DigiCareer AI Interview API", version="1.0.0")
-client = OpenAI(api_key=API_KEY) if API_KEY else None
+AI_PROVIDER = os.getenv("AI_PROVIDER", "gemini").strip().lower()
+if AI_PROVIDER == "gemini":
+    MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+    API_KEY = os.getenv("GEMINI_API_KEY", "").strip()
+    client = genai.Client(api_key=API_KEY) if API_KEY else None
+else:
+    MODEL = os.getenv("OPENAI_MODEL", "gpt-4.1-mini")
+    API_KEY = os.getenv("OPENAI_API_KEY", "").strip()
+    client = None
+app = FastAPI(title="DigiCareer AI Interview API", version="1.1.0")
 
 def now_iso():
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
@@ -101,7 +108,7 @@ def current_user(authorization: Optional[str] = Header(default=None)):
 
 def require_ai():
     if not client:
-        raise HTTPException(503, "AI is not configured yet. Add OPENAI_API_KEY to the server environment and restart DigiCareer.")
+        raise HTTPException(503, "AI is not configured. Set GEMINI_API_KEY in the server environment.")
     return client
 
 def extract_output(response) -> str:
@@ -113,14 +120,18 @@ def extract_output(response) -> str:
 def ask_ai(instructions: str, payload: dict) -> dict:
     ai = require_ai()
     try:
-        response = ai.responses.create(
+        if AI_PROVIDER != "gemini":
+            raise RuntimeError("This deployment is configured for Gemini. Set AI_PROVIDER=gemini.")
+        response = ai.models.generate_content(
             model=MODEL,
-            instructions=instructions,
-            input=json.dumps(payload, ensure_ascii=False),
-            max_output_tokens=1400
+            contents=json.dumps(payload, ensure_ascii=False),
+            config=types.GenerateContentConfig(
+                system_instruction=instructions,
+                response_mime_type="application/json",
+                max_output_tokens=1400,
+            ),
         )
-        raw = extract_output(response)
-        # Permit JSON inside a fenced block if the model includes one.
+        raw = (response.text or "").strip()
         raw = raw.removeprefix("```json").removeprefix("```").removesuffix("```").strip()
         return json.loads(raw)
     except HTTPException:
@@ -128,7 +139,6 @@ def ask_ai(instructions: str, payload: dict) -> dict:
     except json.JSONDecodeError:
         raise HTTPException(502, "The AI response could not be parsed. Please retry your answer.")
     except Exception as exc:
-        # Avoid exposing credentials or provider internals to the browser.
         print("AI provider error:", type(exc).__name__, str(exc)[:300])
         raise HTTPException(502, "The AI interviewer could not respond. Check the server API configuration and try again.")
 
@@ -219,7 +229,7 @@ def logout(user=Depends(current_user), authorization: Optional[str]=Header(defau
 @app.post("/api/interviews")
 def start_interview(body: StartBody, user=Depends(current_user)):
     if not API_KEY:
-        raise HTTPException(503, "AI is not configured yet. Set OPENAI_API_KEY on the server. See README.md.")
+        raise HTTPException(503, "AI is not configured yet. Set GEMINI_API_KEY on the server. See README.md.")
     role = body.role.strip()
     payload={"role":role,"interview_type":body.interview_type,"experience_level":body.level,
              "language":body.language,"question_number":1,"total_questions":body.question_count}
