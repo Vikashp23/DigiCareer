@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Optional
 
 from fastapi import FastAPI, Header, HTTPException, Depends
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, EmailStr, Field
 from google import genai
@@ -206,6 +206,19 @@ def build_report(row, transcript, last_feedback=None):
 @app.get("/")
 def home():
     return FileResponse(BASE_DIR / "index.html")
+
+@app.get("/robots.txt", include_in_schema=False)
+def robots_txt():
+    content = "User-agent: *\\nAllow: /\\nDisallow: /api/\\nSitemap: https://digicareer.onrender.com/sitemap.xml\\n"
+    return Response(content=content, media_type="text/plain; charset=utf-8")
+
+@app.get("/sitemap.xml", include_in_schema=False)
+def sitemap_xml():
+    content = """<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://digicareer.onrender.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+</urlset>"""
+    return Response(content=content, media_type="application/xml; charset=utf-8")
 
 @app.get("/api/health")
 def health():
