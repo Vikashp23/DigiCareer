@@ -21,7 +21,7 @@ load_dotenv(BASE_DIR / ".env")
 DB_PATH = Path(os.getenv("DIGICAREER_DB", str(BASE_DIR / "digicareer.db")))
 AI_PROVIDER = os.getenv("AI_PROVIDER", "gemini").strip().lower()
 if AI_PROVIDER == "gemini":
-    MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+    MODEL = os.getenv("GEMINI_MODEL", "gemini-3.8-flash")
     API_KEY = os.getenv("GEMINI_API_KEY", "").strip()
     client = genai.Client(api_key=API_KEY) if API_KEY else None
 else:
