@@ -209,7 +209,7 @@ def home():
 
 @app.get("/robots.txt", include_in_schema=False)
 def robots_txt():
-    content = "User-agent: *\\nAllow: /\\nDisallow: /api/\\nSitemap: https://digicareer.onrender.com/sitemap.xml\\n"
+    content = "User-agent: *\nAllow: /\nDisallow: /api/\nSitemap: https://digicareer.onrender.com/sitemap.xml\n"
     return Response(content=content, media_type="text/plain; charset=utf-8")
 
 @app.get("/sitemap.xml", include_in_schema=False)
