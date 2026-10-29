@@ -57,10 +57,13 @@ def init_db():
           role TEXT NOT NULL, interview_type TEXT NOT NULL, level TEXT NOT NULL,
           question_count INTEGER NOT NULL, language TEXT NOT NULL, current_question TEXT NOT NULL,
           transcript TEXT NOT NULL, status TEXT NOT NULL, score INTEGER, report TEXT,
-          created_at TEXT NOT NULL, finished_at TEXT
+          created_at TEXT NOT NULL, finished_at TEXT, job_description TEXT NOT NULL DEFAULT ''
         );
         CREATE INDEX IF NOT EXISTS idx_interviews_user ON interviews(user_id, created_at DESC);
         """)
+        columns = {row["name"] for row in con.execute("PRAGMA table_info(interviews)").fetchall()}
+        if "job_description" not in columns:
+            con.execute("ALTER TABLE interviews ADD COLUMN job_description TEXT NOT NULL DEFAULT ''")
 
 init_db()
 
@@ -79,6 +82,7 @@ class StartBody(BaseModel):
     level: str = Field(min_length=1, max_length=30)
     question_count: int = Field(ge=5, le=12)
     language: str = Field(min_length=2, max_length=30)
+    job_description: str = Field(default="", max_length=20000)
 
 class AnswerBody(BaseModel):
     answer: str = Field(min_length=1, max_length=6000)
@@ -162,7 +166,7 @@ def ask_ai(instructions: str, payload: dict) -> dict:
 
 QUESTION_INSTRUCTIONS = """You are a professional, fair job interviewer conducting practice interviews.
 Return ONLY valid JSON with keys: question (string).
-Ask exactly one concise question appropriate for the target role, interview type, candidate experience level, and language. Do not ask for sensitive personal data. For accounting roles, questions may cover reconciliation, GST, TDS, AP/AR, journals, Excel, controls and month-end close as appropriate. For other roles, use relevant role knowledge. Make it realistic, clear, and not overly difficult for the chosen level."""
+Ask exactly one concise question appropriate for the target role, interview type, candidate experience level, language, and supplied job description. When a job description is provided, prioritise its actual responsibilities, required skills, tools, and qualifications. Cover a balanced mix of role-specific technical questions and realistic practical scenarios; include HR questions when the interview type is mixed. Do not invent employer requirements or ask for sensitive personal data. For accounting roles, questions may cover reconciliation, GST, TDS, AP/AR, journals, Excel, controls and month-end close as appropriate. For other roles, use relevant role knowledge. Make it realistic, clear, and not overly difficult for the chosen level."""
 
 ANSWER_INSTRUCTIONS = """You are a professional job interview coach and interviewer. Assess the candidate's answer fairly against the question and role. Do not infer personality or protected traits. Be constructive and specific. Return ONLY valid JSON with keys:
 score (integer 0-100), feedback (string, 2-5 sentences), next_question (string), finished (boolean), overall_score (integer 0-100), technical_knowledge (string), answer_clarity (string), structure (string), role_relevance (string), strengths (array of 1-4 strings), improvements (array of 1-5 strings), next_steps (array of 1-5 strings).
@@ -179,7 +183,7 @@ def interview_public(row):
     transcript = json.loads(row["transcript"])
     return {"id":row["id"],"role":row["role"],"interview_type":row["interview_type"],
             "level":row["level"],"question_count":row["question_count"],"language":row["language"],
-            "current_question":row["current_question"],"answers":transcript,"status":row["status"],
+            "job_description":row.get("job_description",""),"current_question":row["current_question"],"answers":transcript,"status":row["status"],
             "score":row["score"]}
 
 def build_report(row, transcript, last_feedback=None):
@@ -249,8 +253,10 @@ def start_interview(body: StartBody, user=Depends(current_user)):
     if not API_KEY:
         raise HTTPException(503, "AI is not configured yet. Set GEMINI_API_KEY on the server. See README.md.")
     role = body.role.strip()
+    job_description = body.job_description.strip()
     payload={"role":role,"interview_type":body.interview_type,"experience_level":body.level,
-             "language":body.language,"question_number":1,"total_questions":body.question_count}
+             "language":body.language,"job_description":job_description,
+             "question_number":1,"total_questions":body.question_count}
     result=ask_ai(QUESTION_INSTRUCTIONS,payload)
     question=str(result.get("question","")).strip()
     if not question:
@@ -258,8 +264,8 @@ def start_interview(body: StartBody, user=Depends(current_user)):
     interview_id=secrets.token_urlsafe(18)
     transcript=[]
     with connect() as con:
-        con.execute("""INSERT INTO interviews(id,user_id,role,interview_type,level,question_count,language,current_question,transcript,status,created_at)
-        VALUES(?,?,?,?,?,?,?,?,?,?,?)""",(interview_id,user["id"],role,body.interview_type,body.level,body.question_count,body.language,question,json.dumps(transcript), "in_progress",now_iso()))
+        con.execute("""INSERT INTO interviews(id,user_id,role,interview_type,level,question_count,language,current_question,transcript,status,created_at,job_description)
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?)""",(interview_id,user["id"],role,body.interview_type,body.level,body.question_count,body.language,question,json.dumps(transcript), "in_progress",now_iso(),job_description))
         row=con.execute("SELECT * FROM interviews WHERE id=?",(interview_id,)).fetchone()
     return interview_public(dict(row))
 
@@ -275,7 +281,8 @@ def answer_interview(interview_id: str, body: AnswerBody, user=Depends(current_u
     if len(transcript)>=row["question_count"]:
         raise HTTPException(409,"The question limit has been reached. Finish the interview.")
     payload={"role":row["role"],"interview_type":row["interview_type"],"experience_level":row["level"],
-             "language":row["language"],"question_number":len(transcript)+1,"total_questions":row["question_count"],
+             "language":row["language"],"job_description":row.get("job_description",""),
+             "question_number":len(transcript)+1,"total_questions":row["question_count"],
              "finish_now":len(transcript)+1>=row["question_count"],
              "current_question":row["current_question"],"candidate_answer":answer,
              "previous_exchange":[{"question":x["question"],"answer":x["answer"],"feedback":x.get("feedback","")} for x in transcript[-4:]]}
