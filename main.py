@@ -4,6 +4,7 @@ import json
 import os
 import secrets
 import sqlite3
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
@@ -122,15 +123,32 @@ def ask_ai(instructions: str, payload: dict) -> dict:
     try:
         if AI_PROVIDER != "gemini":
             raise RuntimeError("This deployment is configured for Gemini. Set AI_PROVIDER=gemini.")
-        response = ai.models.generate_content(
-            model=MODEL,
-            contents=json.dumps(payload, ensure_ascii=False),
-            config=types.GenerateContentConfig(
-                system_instruction=instructions,
-                response_mime_type="application/json",
-                max_output_tokens=1400,
-            ),
-        )
+
+        response = None
+        for attempt in range(3):
+            try:
+                response = ai.models.generate_content(
+                    model=MODEL,
+                    contents=json.dumps(payload, ensure_ascii=False),
+                    config=types.GenerateContentConfig(
+                        system_instruction=instructions,
+                        response_mime_type="application/json",
+                        max_output_tokens=1400,
+                    ),
+                )
+                break
+            except Exception as exc:
+                message = str(exc).upper()
+                transient = any(marker in message for marker in (
+                    "503", "UNAVAILABLE", "429", "RESOURCE_EXHAUSTED",
+                    "500", "INTERNAL", "TIMEOUT", "TIMED OUT",
+                ))
+                if not transient or attempt == 2:
+                    raise
+                delay = 1 + (2 ** attempt)
+                print(f"Temporary AI provider error on attempt {attempt + 1}/3; retrying in {delay}s.")
+                time.sleep(delay)
+
         raw = (response.text or "").strip()
         raw = raw.removeprefix("```json").removeprefix("```").removesuffix("```").strip()
         return json.loads(raw)
